@@ -10,10 +10,10 @@ We propose a method for converting a single RGB-D input image into a 3D photo, i
 [Johannes Kopf](https://johanneskopf.de/), 
 [Jia-Bin Huang](https://filebox.ece.vt.edu/~jbhuang/)
 <br/>
-In CVPR, 2020.
+In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
 [Paper](https://drive.google.com/file/d/17ki_YAL1k5CaHHP3pIBFWvw-ztF4CCPP/view?usp=sharing)
-[Website](https://shihmengli.github.io/3D-Photo-Inpainting/)
+[Project Website](https://shihmengli.github.io/3D-Photo-Inpainting/)
 
 ## Prerequisites
 
