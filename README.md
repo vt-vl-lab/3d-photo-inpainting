@@ -52,7 +52,7 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
     python demo.py --config argument.yml
     ```
     - Note: The 3D photo generation process usually takes about 2-3 minutes depending on the available computing resources.
-3. The outputs file are in the ```output``` folder
+3. The results are stored in the following directories:
     - Corresponding depth map estimated by [MiDaS](https://github.com/intel-isl/MiDaS.git) 
         - E.g. ```depth/moon.npy```
     - Inpainted 3D mesh
