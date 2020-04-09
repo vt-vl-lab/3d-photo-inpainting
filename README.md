@@ -33,12 +33,10 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
     ```
-- Next, please download the model weight and put them in the directory ```checkpoints```
+- Next, please download the model weight using the following command:
     ```bash
-    wget edge-model.pth checkpoints/
-    wget depth-model.pth checkpoints/
-    wget color-model.pth checkpoints/
-    wget model.pt MiDaS/
+    chmod +x download.sh
+    ./download.sh
     ```    
 
 ## Quick start
