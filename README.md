@@ -1,19 +1,19 @@
 # [CVPR 2020] 3D Photography using Context-aware Layered Depth Inpainting
 
-We propose a method for converting a single RGB-D input image into a 3D photo, i.e., a multi-layer representation for novel view synthesis that contains hallucinated color and depth structures in regions occluded in the original view. We use a Layered Depth Image with explicit pixel connectivity as underlying representation, and present a learning-based inpainting model that iteratively synthesizes new local color-and-depth content into the occluded region in a spatial context-aware manner. The resulting 3D photos can be efficiently rendered with motion parallax using standard graphics engines. We validate the effectiveness of our method on a wide range of challenging everyday scenes and show less artifacts when compared with the state-of-the-arts.
+We propose a method for converting a single RGB-D input image into a 3D photo, i.e., a multi-layer representation for novel view synthesis that contains hallucinated color and depth structures in regions occluded in the original view. We use a Layered Depth Image with explicit pixel connectivity as underlying representation, and present a learning-based inpainting model that iteratively synthesizes new local color-and-depth content into the occluded region in a spatial context-aware manner. The resulting 3D photos can be efficiently rendered with motion parallax using standard graphics engines. We validate the effectiveness of our method on a wide range of challenging everyday scenes and show fewer artifacts when compared with the state-of-the-arts.
 <br/>
 
 **3D Photography using Context-aware Layered Depth Inpainting**
 <br/>
 [Meng-Li Shih](https://shihmengli.github.io/), 
 [Shih-Yang Su](https://lemonatsu.github.io/), 
-[Johannes Kopf](https://johanneskopf.de/), 
+[Johannes Kopf](https://johanneskopf.de/), and
 [Jia-Bin Huang](https://filebox.ece.vt.edu/~jbhuang/)
 <br/>
-In CVPR, 2020.
+In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
-[Paper](https://drive.google.com/file/d/17ki_YAL1k5CaHHP3pIBFWvw-ztF4CCPP/view?usp=sharing)
-[Website](https://shihmengli.github.io/3D-Photo-Inpainting/)
+[[Paper](https://drive.google.com/file/d/17ki_YAL1k5CaHHP3pIBFWvw-ztF4CCPP/view?usp=sharing)]
+[[Project Website](https://shihmengli.github.io/3D-Photo-Inpainting/)]
 
 ## Prerequisites
 
