@@ -7,7 +7,7 @@ num_frames: 240
 x_shift_range: -0.03
 y_shift_range: -0.00
 z_shift_range: -0.07
-specific: 'moon'
+specific: ''
 longer_side_len: 960
 src_folder: image
 depth_folder: depth
