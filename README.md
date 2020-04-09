@@ -26,6 +26,7 @@ and Python dependencies list in [requirements.txt](requirements.txt)
 - To prepare the environment, you could run the following commands
     ```bash
     conda create -n 3DP python=3.7 anaconda
+    conda activate 3DP
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
     ```
