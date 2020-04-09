@@ -7,7 +7,7 @@ We propose a method for converting a single RGB-D input image into a 3D photo, i
 <br/>
 [Meng-Li Shih](https://shihmengli.github.io/), 
 [Shih-Yang Su](https://lemonatsu.github.io/), 
-[Johannes Kopf](https://johanneskopf.de/), 
+[Johannes Kopf](https://johanneskopf.de/), and
 [Jia-Bin Huang](https://filebox.ece.vt.edu/~jbhuang/)
 <br/>
 In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
