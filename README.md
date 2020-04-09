@@ -30,7 +30,7 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
     ```
-- Next, please download the model weight and put them in directory checkpoints/
+- Next, please download the model weight and put them in the directory ```checkpoints```
     ```bash
     wget edge-model.pth checkpoints/
     wget depth-model.pth checkpoints/
@@ -39,18 +39,18 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     ```    
 
 ## Quick start
-To get started as quickly as possible, follow the instructions in this section. 
+Please follow the instructions in this section. 
 This should allow to execute our results.
 For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATION.md).
 
 ## Execute
-1. Put ```.jpg``` files (e.g. test.jpg) into ```image``` folder. 
-    - E.g. `image/moon.jpg`
+1. Put ```.jpg``` files (e.g., test.jpg) into the ```image``` folder. 
+    - E.g., `image/moon.jpg`
 2. Run the following command
-    - Note: The whole process may take 3 minutes or more depends on the computing resource.
     ```bash
     python demo.py --config argument.yml
     ```
+    - Note: The 3D photo generation process usually takes about 2-3 minutes depending on the available computing resources.
 3. The outputs file are in the ```output``` folder
     - Corresponding depth map estimated by [MiDaS](https://github.com/intel-isl/MiDaS.git) 
         - E.g. ```depth/moon.npy```
@@ -64,7 +64,7 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
 ## License
 This work is licensed under MIT License. See [LICENSE](LICENSE) for details. 
 
-If you use our code/models in your research, please cite our paper:
+If you find our code/models useful, please consider citing our paper:
 ```
 @inproceedings{Shih3DP20,
   author = {Shih, Meng-Li and Su, Shih-Yang and Kopf, Johannes and Huang, Jia-Bin},
