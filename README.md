@@ -22,15 +22,15 @@ In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 - Python 3.7 (tested on 3.7.4)
 - PyTorch 1.4.0 (tested on 1.4.0 for execution)
 
-and Python dependencies list in [requirements.txt](requirements.txt)
-- To prepare the environment, you could run the following commands
+and the Python dependencies listed in [requirements.txt](requirements.txt)
+- To get started, please run the following commands:
     ```bash
     conda create -n 3DP python=3.7 anaconda
     conda activate 3DP
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit=10.1 -c pytorch
     ```
-- Our method requires learning-based model. Please download them and put them in correct directory.
+- Next, please download the model weight and put them in directory checkpoints/
     ```bash
     wget edge-model.pth checkpoints/
     wget depth-model.pth checkpoints/
