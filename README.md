@@ -58,7 +58,7 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
     - Inpainted 3D mesh
         - E.g. ```mesh/moon.ply```
     - Rendered videos with zoom-in motion
-        - E.g. ```mesh/moon_straight-line.mp4```
+        - E.g. ```mesh/moon_zoom-in.mp4```
     - Rendered videos with swing motion
         - E.g. ```mesh/moon_swing.mp4```
     - Rendered videos with circle motion
