@@ -44,13 +44,13 @@ argument.yml
     - Total number of frames in output rendered video
 - `x_shift_range: [-0.03, -0.03, -0.03]`
     - The translations on x-axis of output rendered videos.
-    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+    - This parameter is a list. Each element in it corresponds to a specific camera motion.
 - `y_shift_range: [-0.00, -0.00, -0.03]`
     - The translations on y-axis of output rendered videos.
-    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+    - This parameter is a list. Each element in it corresponds to a specific camera motion.
 - `z_shift_range: [-0.07, -0.07, -0.07]`
     - The translations on z-axis of output rendered videos.
-    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+    - This parameter is a list. Each element in it corresponds to a specific camera motion.
 - `traj_types: ['straight-line', 'circle', 'circle']`
     - The type of camera trajectory.
     - This parameter is a list.
