@@ -37,4 +37,4 @@ depth_edge_dilate_2: 5
 extrapolate_border: True
 extrapolation_thickness: 60
 repeat_inpaint_edge: True
-crop_border: False
+crop_border: 0.03
