@@ -4,9 +4,11 @@ rgb_feat_model_ckpt: checkpoints/color-model.pth
 MiDaS_model_ckpt: MiDaS/model.pt
 fps: 60
 num_frames: 240
-x_shift_range: -0.03
-y_shift_range: -0.00
-z_shift_range: -0.07
+x_shift_range: [-0.03, -0.03, -0.03]
+y_shift_range: [-0.00, -0.00, -0.03]
+z_shift_range: [-0.07, -0.07, -0.07]
+traj_types: ['straight-line', 'circle', 'circle']
+video_postfix: ['zoom-in', 'swing', 'circle']
 specific: ''
 longer_side_len: 960
 src_folder: image
@@ -17,6 +19,7 @@ load_ply: False
 save_ply: True
 inference_video: True
 gpu_ids: 0
+offscreen_rendering: True
 img_format: '.jpg'
 depth_threshold: 0.04
 ext_edge_threshold: 0.002

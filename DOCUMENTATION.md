@@ -42,12 +42,23 @@ argument.yml
     - Frame per second of output rendered video
 - `num_frames: 240`
     - Total number of frames in output rendered video
-- `x_shift_range: 0.02`
-    - The translation on x-axis of output rendered video
-- `y_shift_range: 0.02`
-    - The translation on y-axis of output rendered video
-- `z_shift_range: 0.02 `
-    - The translation on z-axis of output rendered video
+- `x_shift_range: [-0.03, -0.03, -0.03]`
+    - The translations on x-axis of output rendered videos.
+    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+- `y_shift_range: [-0.00, -0.00, -0.03]`
+    - The translations on y-axis of output rendered videos.
+    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+- `z_shift_range: [-0.07, -0.07, -0.07]`
+    - The translations on z-axis of output rendered videos.
+    - This parameter is a list. Each element in it corresponding to a specific camera motion.
+- `traj_types: ['straight-line', 'circle', 'circle']`
+    - The type of camera trajectory.
+    - This parameter is a list.
+    - Currently, we only privode `straight-line` and `circle`.
+-  `video_postfix: ['zoom-in', 'swing', 'circle']`
+    - The postfix of video.
+    - This parameter is a list.
+- Note that the number of elements in `x_shift_range`,  `y_shift_range`, `z_shift_range`, `traj_types` and `video_postfix` should be equal.
 - `specific: '' `
     - The specific image name, use this to specify the image to be executed. By default, all the image in the folder will    be executed.
 - `longer_side_len: 960`
@@ -68,6 +79,9 @@ argument.yml
     - Action to rendered the output video
 - `gpu_ids: 0`
     - The ID of working GPU
+- `offscreen_rendering: True`
+    - If you're executing the process in a remote server (via ssh), please switch on this flag. 
+    - Sometimes, using off-screen rendering result in longer execution time.
 - `img_format: '.jpg'`
     - Input image format.
 - `depth_threshold: 0.04`
