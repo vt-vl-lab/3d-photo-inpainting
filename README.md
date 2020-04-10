@@ -49,7 +49,7 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
     - E.g., `image/moon.jpg`
 2. Run the following command
     ```bash
-    python demo.py --config argument.yml
+    python main.py --config argument.yml
     ```
     - Note: The 3D photo generation process usually takes about 2-3 minutes depending on the available computing resources.
 3. The results are stored in the following directories:
