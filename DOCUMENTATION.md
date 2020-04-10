@@ -60,8 +60,6 @@ argument.yml
     - Output 3-D mesh directory.
 - `video_folder: video`
     - Output rendered video directory
-- `traj_type: circle`
-    - The trajectory types of rendered video. Could be `circle` or `straight_line`
 - `load_ply: False`
     - Action to load existed mesh (.ply) file
 - `save_ply: True`

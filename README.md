@@ -57,8 +57,10 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
         - E.g. ```depth/moon.npy```
     - Inpainted 3D mesh
         - E.g. ```mesh/moon.ply```
-    - Rendered videos with circular motion
-        - E.g. ```mesh/moon.mp4```
+    - Rendered videos with straight-line motion
+        - E.g. ```mesh/moon_straight-line.mp4```
+    - Rendered videos with swing motion
+        - E.g. ```mesh/moon_swing.mp4```        
 4. (Optional) If you want to change the default configuration. Please read [`DOCUMENTATION.md`](DOCUMENTATION.md) and modified ```argument.yml```.
 
 

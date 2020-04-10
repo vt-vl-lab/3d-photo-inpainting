@@ -2156,8 +2156,8 @@ class Canvas_view():
         self.view.camera.view_changed()
 
 
-def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, ref_pose, 
-                    output_dir, ref_image, int_mtx, config, image, video_pose, video_basename, original_H=None, original_W=None,
+def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, video_traj_types, ref_pose, 
+                    output_dir, ref_image, int_mtx, config, image, videos_poses, video_basename, original_H=None, original_W=None,
                     border=None, depth=None, normal_canvas=None, all_canvas=None):
     
     cam_mesh = netx.Graph()
@@ -2224,40 +2224,41 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
                   0,
                   img.shape[1]]
     anchor = np.array(anchor) * factor
-    stereos = []
-    tops = []; buttoms = []; lefts = []; rights = []
-    for tp_id, tp in enumerate(video_pose):
-        rel_pose = np.linalg.inv(np.dot(tp, np.linalg.inv(ref_pose)))
-        axis, angle = transforms3d.axangles.mat2axangle(rel_pose[0:3, 0:3])
-        normal_canvas.rotate(axis=axis, angle=(angle*180)/np.pi)
-        normal_canvas.translate(rel_pose[:3,3])
-        normal_canvas.view_changed()
-        img = normal_canvas.render()
-        img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_CUBIC)
-        img = img[anchor[0]:anchor[1], anchor[2]:anchor[3]]
-        img = img[int(border[0]):int(border[1]), int(border[2]):int(border[3])]
+    for video_pose, video_traj_type in zip(videos_poses, video_traj_types):
+        stereos = []
+        tops = []; buttoms = []; lefts = []; rights = []
+        for tp_id, tp in enumerate(video_pose):
+            rel_pose = np.linalg.inv(np.dot(tp, np.linalg.inv(ref_pose)))
+            axis, angle = transforms3d.axangles.mat2axangle(rel_pose[0:3, 0:3])
+            normal_canvas.rotate(axis=axis, angle=(angle*180)/np.pi)
+            normal_canvas.translate(rel_pose[:3,3])
+            normal_canvas.view_changed()
+            img = normal_canvas.render()
+            img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_CUBIC)
+            img = img[anchor[0]:anchor[1], anchor[2]:anchor[3]]
+            img = img[int(border[0]):int(border[1]), int(border[2]):int(border[3])]
+            if config['crop_border'] is True:
+                top, buttom, left, right = find_largest_rect(img, bg_color=(128, 128, 128))
+                tops.append(top); buttoms.append(buttom); lefts.append(left); rights.append(right)
+            stereos.append(img[..., :3])
+            normal_canvas.translate(-rel_pose[:3,3])
+            normal_canvas.rotate(axis=axis, angle=-(angle*180)/np.pi)
+            normal_canvas.view_changed()
         if config['crop_border'] is True:
-            top, buttom, left, right = find_largest_rect(img, bg_color=(128, 128, 128))
-            tops.append(top); buttoms.append(buttom); lefts.append(left); rights.append(right)
-        stereos.append(img[..., :3])
-        normal_canvas.translate(-rel_pose[:3,3])
-        normal_canvas.rotate(axis=axis, angle=-(angle*180)/np.pi)
-        normal_canvas.view_changed()
-    if config['crop_border'] is True:
-        atop, abuttom = min(max(tops), img.shape[0]//2 - 10), max(min(buttoms), img.shape[0]//2 + 10)
-        aleft, aright = min(max(lefts), img.shape[1]//2 - 10), max(min(rights), img.shape[1]//2 + 10)
-        atop -= atop % 2; abuttom -= abuttom % 2; aleft -= aleft % 2; aright -= aright % 2
-    else:
-        atop = 0; abuttom = img.shape[0] - img.shape[0] % 2; aleft = 0; aright = img.shape[1] - img.shape[1] % 2
-    crop_stereos = []
-    for stereo in stereos:
-        crop_stereos.append((stereo[atop:abuttom, aleft:aright, :3] * 1).astype(np.uint8))
-        stereos = crop_stereos
-    clip = ImageSequenceClip(stereos, fps=config['fps'])
-    if isinstance(video_basename, list):
-        video_basename = video_basename[0]
-    clip.write_videofile(os.path.join(output_dir, video_basename + '.mp4'), fps=config['fps'])
-    
+            atop, abuttom = min(max(tops), img.shape[0]//2 - 10), max(min(buttoms), img.shape[0]//2 + 10)
+            aleft, aright = min(max(lefts), img.shape[1]//2 - 10), max(min(rights), img.shape[1]//2 + 10)
+            atop -= atop % 2; abuttom -= abuttom % 2; aleft -= aleft % 2; aright -= aright % 2
+        else:
+            atop = 0; abuttom = img.shape[0] - img.shape[0] % 2; aleft = 0; aright = img.shape[1] - img.shape[1] % 2
+        crop_stereos = []
+        for stereo in stereos:
+            crop_stereos.append((stereo[atop:abuttom, aleft:aright, :3] * 1).astype(np.uint8))
+            stereos = crop_stereos
+        clip = ImageSequenceClip(stereos, fps=config['fps'])
+        if isinstance(video_basename, list):
+            video_basename = video_basename[0]
+        clip.write_videofile(os.path.join(output_dir, video_basename + '_' + video_traj_type + '.mp4'), fps=config['fps'])
+        
     
     
     return normal_canvas, all_canvas 

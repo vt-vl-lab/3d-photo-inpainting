@@ -95,12 +95,12 @@ for idx in tqdm(range(len(sample_list))):
         verts, colors, faces, Height, Width, hFov, vFov = read_ply(mesh_fi)
     else:
         verts, colors, faces, Height, Width, hFov, vFov = rt_info
-    video_pose, video_basename = copy.deepcopy(sample['tgts_pose'][0]), sample['tgt_name']
+    videos_poses, video_basename = copy.deepcopy(sample['tgts_poses']), sample['tgt_name']
     top = (config.get('original_h') // 2 - sample['int_mtx'][1, 2] * config['output_h'])
     left = (config.get('original_w') // 2 - sample['int_mtx'][0, 2] * config['output_w'])
     down, right = top + config['output_h'], left + config['output_w']
     border = [int(xx) for xx in [top, down, left, right]]
     normal_canvas, all_canvas = output_3d_photo(verts.copy(), colors.copy(), faces.copy(), copy.deepcopy(Height), copy.deepcopy(Width), copy.deepcopy(hFov), copy.deepcopy(vFov), 
-                        copy.deepcopy(sample['tgt_pose']), copy.deepcopy(sample['ref_pose']), copy.deepcopy(config['video_folder']), 
+                        copy.deepcopy(sample['tgt_pose']), sample['traj_types'], copy.deepcopy(sample['ref_pose']), copy.deepcopy(config['video_folder']), 
                         image.copy(), copy.deepcopy(sample['int_mtx']), config, image, 
-                        video_pose, video_basename, config.get('original_h'), config.get('original_w'), border=border, depth=depth, normal_canvas=normal_canvas, all_canvas=all_canvas)
+                        videos_poses, video_basename, config.get('original_h'), config.get('original_w'), border=border, depth=depth, normal_canvas=normal_canvas, all_canvas=all_canvas)

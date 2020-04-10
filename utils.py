@@ -24,14 +24,14 @@ from scipy.interpolate import interp1d
 from collections import namedtuple
 
 def path_planning(num_frames, x, y, z, path_type=''):
-    if path_type == 'straight_line':
+    if path_type == 'straight-line':
         corner_points = np.array([[0, 0, 0], [(0 + x) * 0.5, (0 + y) * 0.5, (0 + z) * 0.5], [x, y, z]])
         corner_t = np.linspace(0, 1, len(corner_points))
         t = np.linspace(0, 1, num_frames)
         cs = interp1d(corner_t, corner_points, axis=0, kind='quadratic')
         spline = cs(t)
         xs, ys, zs = [xx.squeeze() for xx in np.split(spline, 3, 1)]
-    elif path_type == 'circle':
+    elif path_type == 'swing':
         xs, ys, zs = [], [], []
         for frame_id, bs_shift_val in enumerate(np.arange(-2.0, 2.0, (4./num_frames))):
             xs += [np.cos(bs_shift_val * np.pi) * 1 * x]
@@ -829,14 +829,26 @@ def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_cer
     lines = [os.path.splitext(os.path.basename(xx))[0] for xx in glob.glob(os.path.join(image_folder, '*' + config['img_format']))]
     samples = []
     generic_pose = np.eye(4)
-    tgts_pose = []
+    tgts_poses = []
+    tgt_poses = []
+    traj_types = ['straight-line']
     sx, sy, sz = path_planning(config['num_frames'], config['x_shift_range'], config['y_shift_range'], 
-                               config['z_shift_range'], path_type=config['traj_type'])
+                               config['z_shift_range'], path_type=traj_types[-1])
     for xx, yy, zz in zip(sx, sy, sz):
         tgt_pose = generic_pose * 1
-        tgts_pose.append(generic_pose * 1.)
-        tgts_pose[-1][:3, -1] = np.array([xx, yy, zz])
-    tgts_pose = [tgts_pose]
+        tgt_poses.append(generic_pose * 1.)
+        tgt_poses[-1][:3, -1] = np.array([xx, yy, zz])
+    tgts_poses += [tgt_poses]
+
+    tgt_poses = []
+    traj_types += ['swing']
+    sx, sy, sz = path_planning(config['num_frames'], config['x_shift_range']/2., config['y_shift_range']/2., 
+                               config['z_shift_range'], path_type=traj_types[-1])
+    for xx, yy, zz in zip(sx, sy, sz):
+        tgt_pose = generic_pose * 1
+        tgt_poses.append(generic_pose * 1.)
+        tgt_poses[-1][:3, -1] = np.array([xx, yy, zz])
+    tgts_poses += [tgt_poses]
     tgt_pose = generic_pose * 1
     tgt_pose[:3, -1] = np.array([config['x_shift_range'], config['y_shift_range'], 0])
     tgt_pose = [[tgt_pose]]
@@ -863,7 +875,8 @@ def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_cer
             sdict['int_mtx'][1, :] = sdict['int_mtx'][1, :] / float(H)
         sdict['ref_pose'] = np.eye(4)
         sdict['tgt_pose'] = tgt_pose
-        sdict['tgts_pose'] = tgts_pose
+        sdict['tgts_poses'] = tgts_poses
+        sdict['traj_types'] = traj_types
         sdict['tgt_name'] = [os.path.splitext(os.path.basename(sdict['depth_fi']))[0]]
         sdict['src_pair_name'] = sdict['tgt_name'][0]
 

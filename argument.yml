@@ -13,7 +13,6 @@ src_folder: image
 depth_folder: depth
 mesh_folder: mesh
 video_folder: video
-traj_type: straight_line
 load_ply: False
 save_ply: True
 inference_video: True
