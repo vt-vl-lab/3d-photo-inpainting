@@ -31,13 +31,19 @@ os.makedirs(config['video_folder'], exist_ok=True)
 os.makedirs(config['depth_folder'], exist_ok=True)
 sample_list = get_MiDaS_samples(config['src_folder'], config['depth_folder'], config, config['specific'])
 normal_canvas, all_canvas = None, None
+
+if isinstance(config["gpu_ids"], int) and (config["gpu_ids"] >= 0):
+    device = config["gpu_ids"]
+else:
+    device = "cpu"
+
 for idx in tqdm(range(len(sample_list))):
     depth = None
     sample = sample_list[idx]
     print("Current Source ==> ", sample['src_pair_name'])
     mesh_fi = os.path.join(config['mesh_folder'], sample['src_pair_name'] +'.ply')
     image = imageio.imread(sample['ref_img_fi'])
-    run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'], 
+    run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'],
               config['MiDaS_model_ckpt'], MonoDepthNet, MiDaS_utils, target_w=640)
     config['output_h'], config['output_w'] = np.load(sample['depth_fi']).shape[:2]
     frac = config['longer_side_len'] / max(config['output_h'], config['output_w'])
@@ -60,22 +66,22 @@ for idx in tqdm(range(len(sample_list))):
         depth_edge_model = Inpaint_Edge_Net(init_weights=True)
         depth_edge_weight = torch.load(config['depth_edge_model_ckpt'])
         depth_edge_model.load_state_dict(depth_edge_weight)
-        depth_edge_model = depth_edge_model.cuda(config['gpu_ids'])
+        depth_edge_model = depth_edge_model.to(device)
         depth_edge_model.eval()
-        
+
         depth_feat_model = Inpaint_Depth_Net()
         depth_feat_weight = torch.load(config['depth_feat_model_ckpt'])
         depth_feat_model.load_state_dict(depth_feat_weight, strict=True)
-        depth_feat_model = depth_feat_model.cuda(config['gpu_ids'])
+        depth_feat_model = depth_feat_model.to(device)
         depth_feat_model.eval()
-        depth_feat_model = depth_feat_model.cuda(config['gpu_ids'])
+        depth_feat_model = depth_feat_model.to(device)
         rgb_model = Inpaint_Color_Net()
         rgb_feat_weight = torch.load(config['rgb_feat_model_ckpt'])
         rgb_model.load_state_dict(rgb_feat_weight)
         rgb_model.eval()
-        rgb_model = rgb_model.cuda(config['gpu_ids'])
+        rgb_model = rgb_model.to(device)
         graph = None
-        rt_info = write_ply(image, 
+        rt_info = write_ply(image,
                             depth,
                             sample['int_mtx'],
                             mesh_fi,
@@ -100,7 +106,7 @@ for idx in tqdm(range(len(sample_list))):
     left = (config.get('original_w') // 2 - sample['int_mtx'][0, 2] * config['output_w'])
     down, right = top + config['output_h'], left + config['output_w']
     border = [int(xx) for xx in [top, down, left, right]]
-    normal_canvas, all_canvas = output_3d_photo(verts.copy(), colors.copy(), faces.copy(), copy.deepcopy(Height), copy.deepcopy(Width), copy.deepcopy(hFov), copy.deepcopy(vFov), 
-                        copy.deepcopy(sample['tgt_pose']), sample['video_postfix'], copy.deepcopy(sample['ref_pose']), copy.deepcopy(config['video_folder']), 
-                        image.copy(), copy.deepcopy(sample['int_mtx']), config, image, 
+    normal_canvas, all_canvas = output_3d_photo(verts.copy(), colors.copy(), faces.copy(), copy.deepcopy(Height), copy.deepcopy(Width), copy.deepcopy(hFov), copy.deepcopy(vFov),
+                        copy.deepcopy(sample['tgt_pose']), sample['video_postfix'], copy.deepcopy(sample['ref_pose']), copy.deepcopy(config['video_folder']),
+                        image.copy(), copy.deepcopy(sample['int_mtx']), config, image,
                         videos_poses, video_basename, config.get('original_h'), config.get('original_w'), border=border, depth=depth, normal_canvas=normal_canvas, all_canvas=all_canvas)
