@@ -1405,6 +1405,12 @@ def DL_inpaint_edge(mesh,
                     specific_edge_id=-1,
                     specific_edge_loc=None,
                     inpaint_iter=0):
+
+    if isinstance(config["gpu_ids"], int) and (config["gpu_ids"] >= 0):
+        device = config["gpu_ids"]
+    else:
+        device = "cpu"
+
     edge_map = np.zeros_like(depth)
     new_edge_ccs = [set() for _ in range(len(edge_ccs))]
     edge_maps_with_id = edge_maps
@@ -1412,10 +1418,10 @@ def DL_inpaint_edge(mesh,
     edge_map = get_map_from_ccs(edge_ccs, mesh.graph['H'], mesh.graph['W'], mesh, edge_condition)
     np_depth, np_image = depth.copy(), image.copy()
     image_c = image.shape[-1]
-    image = torch.FloatTensor(image.transpose(2, 0, 1)).unsqueeze(0).cuda(config['gpu_ids'])
+    image = torch.FloatTensor(image.transpose(2, 0, 1)).unsqueeze(0).to(device)
     if depth.ndim < 3:
         depth = depth[..., None]
-    depth = torch.FloatTensor(depth.transpose(2, 0, 1)).unsqueeze(0).cuda(config['gpu_ids'])
+    depth = torch.FloatTensor(depth.transpose(2, 0, 1)).unsqueeze(0).to(device)
     mesh.graph['max_edge_id'] = len(edge_ccs)
     connnect_points_ccs = [set() for _ in range(len(edge_ccs))]
     gp_time, tmp_mesh_time, bilateral_time = 0, 0, 0
@@ -1465,7 +1471,7 @@ def DL_inpaint_edge(mesh,
                                                                 tensor_edge_dict['disp'],
                                                                 tensor_edge_dict['edge'],
                                                                 unit_length=128,
-                                                                cuda=config['gpu_ids'])
+                                                                cuda=device)
                 depth_edge_output = depth_edge_output.cpu()
             tensor_edge_dict['output'] = (depth_edge_output> config['ext_edge_threshold']).float() * tensor_edge_dict['mask'] + tensor_edge_dict['edge']
         else:
@@ -1494,7 +1500,7 @@ def DL_inpaint_edge(mesh,
                                                     tensor_edge_dict['disp'],
                                                     tensor_input_edge,
                                                     unit_length=128,
-                                                    cuda=config['gpu_ids'])
+                                                    cuda=device)
                         depth_edge_output = depth_edge_output.cpu()
                         depth_edge_output = (depth_edge_output> config['ext_edge_threshold']).float() * tensor_edge_dict['mask'] + tensor_edge_dict['edge']
                         depth_edge_output = depth_edge_output.squeeze().data.cpu().numpy()
@@ -1696,7 +1702,7 @@ def DL_inpaint_edge(mesh,
                                             resize_rgb_dict['rgb'],
                                             resize_rgb_dict['edge'],
                                             unit_length=128,
-                                            cuda=config['gpu_ids'])
+                                            cuda=device)
             rgb_output = rgb_output.cpu()
             if config.get('gray_image') is True:
                 rgb_output = rgb_output.mean(1, keepdim=True).repeat((1,3,1,1))

@@ -162,7 +162,7 @@ class Inpaint_Depth_Net(nn.Module):
             require_len_unit = 2 ** self.layer_size
             residual_h = int(np.ceil(h / float(require_len_unit)) * require_len_unit - h) # + 2*require_len_unit
             residual_w = int(np.ceil(w / float(require_len_unit)) * require_len_unit - w) # + 2*require_len_unit
-            enlarge_input = torch.zeros((input.shape[0], input.shape[1], h + residual_h, w + residual_w)).cuda()
+            enlarge_input = torch.zeros((input.shape[0], input.shape[1], h + residual_h, w + residual_w)).to(input.device)
             if mask_flag:
                 if PCONV is False:
                     enlarge_input += 1.0
@@ -174,7 +174,7 @@ class Inpaint_Depth_Net(nn.Module):
             enlarge_input[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w] = input
 
         return enlarge_input, [anchor_h, anchor_h+h, anchor_w, anchor_w+w]
-    
+
     def forward_3P(self, mask, context, depth, edge, unit_length=128, cuda=None):
         with torch.no_grad():
             input = torch.cat((depth, edge, context, mask), dim=1)
@@ -183,13 +183,8 @@ class Inpaint_Depth_Net(nn.Module):
             residual_w = int(np.ceil(w / float(unit_length)) * unit_length - w)
             anchor_h = residual_h//2
             anchor_w = residual_w//2
-            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).cuda(input.device.index)
+            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).to(cuda)
             enlarge_input[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w] = input
-            if cuda is not None:
-                if isinstance(cuda, int):
-                    enlarge_input = enlarge_input.cuda(cuda)
-                else:
-                    enlarge_input = enlarge_input.cuda()
             # enlarge_input[:, 3] = 1. - enlarge_input[:, 3]
             depth_output = self.forward(enlarge_input)
             depth_output = depth_output[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w]
@@ -293,7 +288,7 @@ class Inpaint_Edge_Net(BaseNetwork):
         require_len_unit = 16
         residual_h = int(np.ceil(h / float(require_len_unit)) * require_len_unit - h) # + 2*require_len_unit
         residual_w = int(np.ceil(w / float(require_len_unit)) * require_len_unit - w) # + 2*require_len_unit
-        enlarge_input = torch.zeros((input.shape[0], input.shape[1], h + residual_h, w + residual_w)).cuda()
+        enlarge_input = torch.zeros((input.shape[0], input.shape[1], h + residual_h, w + residual_w)).to(input.device)
         if channel_pad_1 is not None:
             for channel in channel_pad_1:
                 enlarge_input[:, channel] = 1
@@ -302,7 +297,7 @@ class Inpaint_Edge_Net(BaseNetwork):
         enlarge_input[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w] = input
 
         return enlarge_input, [anchor_h, anchor_h+h, anchor_w, anchor_w+w]
-    
+
     def forward_3P(self, mask, context, rgb, disp, edge, unit_length=128, cuda=None):
         with torch.no_grad():
             input = torch.cat((rgb, disp/disp.max(), edge, context, mask), dim=1)
@@ -311,18 +306,13 @@ class Inpaint_Edge_Net(BaseNetwork):
             residual_w = int(np.ceil(w / float(unit_length)) * unit_length - w)
             anchor_h = residual_h//2
             anchor_w = residual_w//2
-            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).cuda(input.device.index)
+            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).to(cuda)
             enlarge_input[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w] = input
-            if cuda is not None:
-                if isinstance(cuda, int):
-                    enlarge_input = enlarge_input.cuda(cuda)
-                else:
-                    enlarge_input = enlarge_input.cuda(cuda)
             edge_output = self.forward(enlarge_input)
             edge_output = edge_output[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w]
 
         return edge_output
-    
+
     def forward(self, x, refine_border=False):
         if refine_border:
             x, anchor = self.add_border(x, [5])
@@ -349,7 +339,7 @@ class Inpaint_Color_Net(nn.Module):
         self.enc_1 = PCBActiv(in_channels, 64, bn=False, sample='down-7')
         self.enc_2 = PCBActiv(64, 128, sample='down-5')
         self.enc_3 = PCBActiv(128, 256, sample='down-5')
-        self.enc_4 = PCBActiv(256, 512, sample='down-3')        
+        self.enc_4 = PCBActiv(256, 512, sample='down-3')
         self.enc_5 = PCBActiv(512, 512, sample='down-3')
         self.enc_6 = PCBActiv(512, 512, sample='down-3')
         self.enc_7 = PCBActiv(512, 512, sample='down-3')
@@ -359,19 +349,19 @@ class Inpaint_Color_Net(nn.Module):
 
         self.dec_5A = PCBActiv(512 + 512, 512, activ='leaky')
         self.dec_4A = PCBActiv(512 + 256, 256, activ='leaky')
-        self.dec_3A = PCBActiv(256 + 128, 128, activ='leaky')        
-        self.dec_2A = PCBActiv(128 + 64, 64, activ='leaky')        
+        self.dec_3A = PCBActiv(256 + 128, 128, activ='leaky')
+        self.dec_2A = PCBActiv(128 + 64, 64, activ='leaky')
         self.dec_1A = PCBActiv(64 + in_channels, 3, bn=False, activ=None, conv_bias=True)
         '''
         self.dec_5B = PCBActiv(512 + 512, 512, activ='leaky')
         self.dec_4B = PCBActiv(512 + 256, 256, activ='leaky')
-        self.dec_3B = PCBActiv(256 + 128, 128, activ='leaky')        
-        self.dec_2B = PCBActiv(128 + 64, 64, activ='leaky')        
+        self.dec_3B = PCBActiv(256 + 128, 128, activ='leaky')
+        self.dec_2B = PCBActiv(128 + 64, 64, activ='leaky')
         self.dec_1B = PCBActiv(64 + 4, 1, bn=False, activ=None, conv_bias=True)
         '''
     def cat(self, A, B):
         return torch.cat((A, B), dim=1)
-    
+
     def upsample(self, feat, mask):
         feat = F.interpolate(feat, scale_factor=2, mode=self.upsampling_mode)
         mask = F.interpolate(mask, scale_factor=2, mode='nearest')
@@ -386,14 +376,10 @@ class Inpaint_Color_Net(nn.Module):
             residual_w = int(np.ceil(w / float(unit_length)) * unit_length - w) # + 256
             anchor_h = residual_h//2
             anchor_w = residual_w//2
-            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).cuda(input.device.index)
+            enlarge_input = torch.zeros((n, c, h + residual_h, w + residual_w)).to(cuda)
             enlarge_input[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w] = input
             # enlarge_input[:, 3] = 1. - enlarge_input[:, 3]
-            if cuda is not None:
-                if isinstance(cuda, int):
-                    enlarge_input = enlarge_input.cuda(cuda)
-                else:
-                    enlarge_input = enlarge_input.cuda()
+            enlarge_input = enlarge_input.to(cuda)
             rgb_output = self.forward(enlarge_input)
             rgb_output = rgb_output[..., anchor_h:anchor_h+h, anchor_w:anchor_w+w]
 
@@ -410,7 +396,7 @@ class Inpaint_Color_Net(nn.Module):
         f_5, h_5 = self.enc_5(f_4, h_4)
         f_6, h_6 = self.enc_6(f_5, h_5)
         f_7, h_7 = self.enc_7(f_6, h_6)
-        
+
         o_7, k_7 = self.upsample(f_7, h_7)
         o_6, k_6 = self.dec_7(self.cat(o_7, f_6), self.cat(k_7, h_6))
         o_6, k_6 = self.upsample(o_6, k_6)
