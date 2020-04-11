@@ -299,8 +299,9 @@ def extrapolate(global_mesh,
     # import pdb; pdb.set_trace()
     far_edge = (fpath_map > -1).astype(np.uint8)
     update_edge = (npath_map > -1) * mask + edge
-    t_update_edge = torch.FloatTensor(update_edge).cuda(config['gpu_ids'])[None, None, ...]
-    depth_output = depth_feat_model.forward_3P(t_mask, t_context, t_depth_zero_mean_depth, t_update_edge, unit_length=128, cuda=config['gpu_ids'])
+    t_update_edge = torch.FloatTensor(update_edge).to(device)[None, None, ...]
+    depth_output = depth_feat_model.forward_3P(t_mask, t_context, t_depth_zero_mean_depth, t_update_edge, unit_length=128,
+                                               cuda=device if isinstance(device, int) else None)
     depth_output = depth_output.cpu().data.numpy().squeeze()
     depth_output = np.exp(depth_output + input_mean_depth) * mask # + input_depth * context
     # if "right" in direc.lower() and "-" not in direc.lower():
@@ -319,7 +320,9 @@ def extrapolate(global_mesh,
     #     plt.imshow(depth_output); plt.show()
     #     import pdb; pdb.set_trace()
     #     f, ((ax1, ax2)) = plt.subplots(1, 2, sharex=True, sharey=True); ax1.imshow(depth_output); ax2.imshow(npath_map + fpath_map); plt.show()
-    rgb_output = rgb_feat_model.forward_3P(t_mask, t_context, t_rgb, t_update_edge, unit_length=128, cuda=config['gpu_ids'])
+    rgb_output = rgb_feat_model.forward_3P(t_mask, t_context, t_rgb, t_update_edge, unit_length=128,
+                                           cuda=device if isinstance(device, int) else None)
+
     # rgb_output = rgb_feat_model.forward_3P(t_mask, t_context, t_rgb, t_update_edge, unit_length=128, cuda=config['gpu_ids'])
     if config.get('gray_image') is True:
         rgb_output = rgb_output.mean(1, keepdim=True).repeat((1,3,1,1))
@@ -722,13 +725,14 @@ def edge_inpainting(edge_id, context_cc, erode_context_cc, mask_cc, edge_cc, ext
     tensor_edge_dict = convert2tensor(patch_edge_dict)
     if require_depth_edge(patch_edge_dict['edge'], patch_edge_dict['mask']) and inpaint_iter == 0:
         with torch.no_grad():
+            device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else None
             depth_edge_output = depth_edge_model.forward_3P(tensor_edge_dict['mask'],
                                                             tensor_edge_dict['context'],
                                                             tensor_edge_dict['rgb'],
                                                             tensor_edge_dict['disp'],
                                                             tensor_edge_dict['edge'],
                                                             unit_length=128,
-                                                            cuda=config['gpu_ids'])
+                                                            cuda=device)
             depth_edge_output = depth_edge_output.cpu()
         tensor_edge_dict['output'] = (depth_edge_output > config['ext_edge_threshold']).float() * tensor_edge_dict['mask'] + tensor_edge_dict['edge']
     else:
@@ -756,12 +760,13 @@ def depth_inpainting(context_cc, extend_context_cc, erode_context_cc, mask_cc, m
     tensor_depth_dict = convert2tensor(patch_depth_dict)
     resize_mask = open_small_mask(tensor_depth_dict['mask'], tensor_depth_dict['context'], 3, 41)
     with torch.no_grad():
+        device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else None
         depth_output = depth_feat_model.forward_3P(resize_mask,
                                                     tensor_depth_dict['context'],
                                                     tensor_depth_dict['zero_mean_depth'],
                                                     tensor_depth_dict['edge'],
                                                     unit_length=128,
-                                                    cuda=config['gpu_ids'])
+                                                    cuda=device)
         depth_output = depth_output.cpu()
     tensor_depth_dict['output'] = torch.exp(depth_output + depth_dict['mean_depth']) * \
                                             tensor_depth_dict['mask'] + tensor_depth_dict['depth']
