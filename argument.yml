@@ -2,24 +2,24 @@ depth_edge_model_ckpt: checkpoints/edge-model.pth
 depth_feat_model_ckpt: checkpoints/depth-model.pth
 rgb_feat_model_ckpt: checkpoints/color-model.pth
 MiDaS_model_ckpt: MiDaS/model.pt
-fps: 60
+fps: 40
 num_frames: 240
-x_shift_range: [-0.03, -0.03, -0.03]
-y_shift_range: [-0.00, -0.00, -0.03]
+x_shift_range: [-0.03, -0.02, -0.02]
+y_shift_range: [-0.00, -0.00, -0.02]
 z_shift_range: [-0.07, -0.07, -0.07]
 traj_types: ['straight-line', 'circle', 'circle']
 video_postfix: ['zoom-in', 'swing', 'circle']
-specific: ''
+specific: 'moon'
 longer_side_len: 960
 src_folder: image
 depth_folder: depth
 mesh_folder: mesh
 video_folder: video
-load_ply: False
+load_ply: True
 save_ply: True
 inference_video: True
 gpu_ids: 0
-offscreen_rendering: True
+offscreen_rendering: False
 img_format: '.jpg'
 depth_threshold: 0.04
 ext_edge_threshold: 0.002
