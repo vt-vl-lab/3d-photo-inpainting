@@ -198,7 +198,7 @@ def extrapolate(global_mesh,
     t_depth_zero_mean_depth = torch.FloatTensor(input_zero_mean_depth).to(device)[None, None, ...]
 
     depth_edge_output = depth_edge_model.forward_3P(t_mask, t_context, t_rgb, t_disp, t_edge, unit_length=128,
-                                                    cuda=device if isinstance(device, int) else None)
+                                                    cuda=device)
     t_output_edge = (depth_edge_output> config['ext_edge_threshold']).float() * t_mask + t_edge
     output_raw_edge = t_output_edge.data.cpu().numpy().squeeze()
     # import pdb; pdb.set_trace()
@@ -301,7 +301,7 @@ def extrapolate(global_mesh,
     update_edge = (npath_map > -1) * mask + edge
     t_update_edge = torch.FloatTensor(update_edge).to(device)[None, None, ...]
     depth_output = depth_feat_model.forward_3P(t_mask, t_context, t_depth_zero_mean_depth, t_update_edge, unit_length=128,
-                                               cuda=device if isinstance(device, int) else None)
+                                               cuda=device)
     depth_output = depth_output.cpu().data.numpy().squeeze()
     depth_output = np.exp(depth_output + input_mean_depth) * mask # + input_depth * context
     # if "right" in direc.lower() and "-" not in direc.lower():
@@ -321,7 +321,7 @@ def extrapolate(global_mesh,
     #     import pdb; pdb.set_trace()
     #     f, ((ax1, ax2)) = plt.subplots(1, 2, sharex=True, sharey=True); ax1.imshow(depth_output); ax2.imshow(npath_map + fpath_map); plt.show()
     rgb_output = rgb_feat_model.forward_3P(t_mask, t_context, t_rgb, t_update_edge, unit_length=128,
-                                           cuda=device if isinstance(device, int) else None)
+                                           cuda=device)
 
     # rgb_output = rgb_feat_model.forward_3P(t_mask, t_context, t_rgb, t_update_edge, unit_length=128, cuda=config['gpu_ids'])
     if config.get('gray_image') is True:
@@ -725,7 +725,7 @@ def edge_inpainting(edge_id, context_cc, erode_context_cc, mask_cc, edge_cc, ext
     tensor_edge_dict = convert2tensor(patch_edge_dict)
     if require_depth_edge(patch_edge_dict['edge'], patch_edge_dict['mask']) and inpaint_iter == 0:
         with torch.no_grad():
-            device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else None
+            device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else "cpu"
             depth_edge_output = depth_edge_model.forward_3P(tensor_edge_dict['mask'],
                                                             tensor_edge_dict['context'],
                                                             tensor_edge_dict['rgb'],
@@ -760,7 +760,7 @@ def depth_inpainting(context_cc, extend_context_cc, erode_context_cc, mask_cc, m
     tensor_depth_dict = convert2tensor(patch_depth_dict)
     resize_mask = open_small_mask(tensor_depth_dict['mask'], tensor_depth_dict['context'], 3, 41)
     with torch.no_grad():
-        device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else None
+        device = config["gpu_ids"] if isinstance(config["gpu_ids"], int) and config["gpu_ids"] >= 0 else "cpu"
         depth_output = depth_feat_model.forward_3P(resize_mask,
                                                     tensor_depth_dict['context'],
                                                     tensor_depth_dict['zero_mean_depth'],
