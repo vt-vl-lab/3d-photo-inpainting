@@ -58,11 +58,11 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
     - Inpainted 3D mesh
         - E.g. ```mesh/moon.ply```
     - Rendered videos with zoom-in motion
-        - E.g. ```mesh/moon_zoom-in.mp4```
+        - E.g. ```video/moon_zoom-in.mp4```
     - Rendered videos with swing motion
-        - E.g. ```mesh/moon_swing.mp4```
+        - E.g. ```video/moon_swing.mp4```
     - Rendered videos with circle motion
-        - E.g. ```mesh/moon_circle.mp4```        
+        - E.g. ```video/moon_circle.mp4```              
 4. (Optional) If you want to change the default configuration. Please read [`DOCUMENTATION.md`](DOCUMENTATION.md) and modified ```argument.yml```.
 
 
