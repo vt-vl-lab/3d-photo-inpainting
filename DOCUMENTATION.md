@@ -78,7 +78,7 @@ argument.yml
 - `inference_video: True`
     - Action to rendered the output video
 - `gpu_ids: 0`
-    - The ID of working GPU
+    - The ID of working GPU. Leave it blank or negative to use CPU.
 - `offscreen_rendering: True`
     - If you're executing the process in a remote server (via ssh), please switch on this flag. 
     - Sometimes, using off-screen rendering result in longer execution time.
