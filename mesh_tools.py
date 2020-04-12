@@ -1,6 +1,6 @@
 import os
 import numpy as np
-import networkx as netx
+import cynetworkx as netx
 import json
 import scipy.misc as misc
 #import OpenEXR

@@ -1,6 +1,7 @@
 import os
 import numpy as np
-import networkx as netx
+# import networkx as netx
+import cynetworkx as netx
 import json
 import matplotlib.pyplot as plt
 import cv2
@@ -16,7 +17,7 @@ import time
 import copy
 import torch
 import os
-from utils import path_planning, open_small_mask, sparse_bilateral_filtering, clean_far_edge, refine_depth_around_edge
+from utils import path_planning, open_small_mask, clean_far_edge, refine_depth_around_edge
 from utils import refine_color_around_edge, filter_irrelevant_edge_new, require_depth_edge, clean_far_edge_new
 from utils import create_placeholder, refresh_node, find_largest_rect
 from mesh_tools import get_depth_from_maps, get_map_from_ccs, get_edge_from_nodes, get_depth_from_nodes, get_rgb_from_nodes, crop_maps_by_size, convert2tensor, recursive_add_edge, update_info, filter_edge, relabel_node, depth_inpainting
@@ -187,6 +188,9 @@ def generate_init_node(mesh, config, min_node_in_cc):
 
     return mesh, info_on_pix
 
+def get_neighbors(mesh, node):
+    return [*mesh.neighbors(node)]
+
 def generate_face(mesh, info_on_pix, config):
     H, W = mesh.graph['H'], mesh.graph['W']
     str_faces = []
@@ -199,7 +203,7 @@ def generate_face(mesh, info_on_pix, config):
             input.append([cur_id_b, cur_id_self, cur_id_a])
     for node in mesh.nodes:
         cur_id_self = mesh.nodes[node]['cur_id']
-        ne_nodes = [*mesh.neighbors(node)]
+        ne_nodes = get_neighbors(mesh, node)
         four_dir_nes = {'up': [], 'left': [],
                         'down': [], 'right': []}
         for ne_node in ne_nodes:
@@ -237,11 +241,10 @@ def reassign_floating_island(mesh, info_on_pix, image, depth):
     lost_map = np.zeros((H, W))
 
     '''
-    (4) key_exist(d, k) : Check if key "k' exists in dictionary "d"
     (5) is_inside(x, y, xmin, xmax, ymin, ymax) : Check if a pixel(x, y) is inside the border.
     (6) get_cross_nes(x, y) : Get the four cross neighbors of pixel(x, y).
     '''
-    key_exist = lambda d, k: d.get(k) is not None
+    key_exist = lambda d, k: k in d
     is_inside = lambda x, y, xmin, xmax, ymin, ymax: xmin <= x < xmax and ymin <= y < ymax
     get_cross_nes = lambda x, y: [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
     '''
@@ -322,7 +325,6 @@ def remove_node_feat(mesh, *feats):
 
 def update_status(mesh, info_on_pix, depth=None):
     '''
-    (1) key_exist(d, k) : Check if key "k' exists in dictionary "d"
     (2) clear_node_feat(G, *fts) : Clear all the node feature on graph G.
     (6) get_cross_nes(x, y) : Get the four cross neighbors of pixel(x, y).
     '''
@@ -330,30 +332,36 @@ def update_status(mesh, info_on_pix, depth=None):
     is_inside = lambda x, y, xmin, xmax, ymin, ymax: xmin <= x < xmax and ymin <= y < ymax
     get_cross_nes = lambda x, y: [(x + 1, y), (x - 1, y), (x, y - 1), (x, y + 1)]
     append_element = lambda d, k, x: d[k] + [x] if key_exist(d, k) else [x]
-    def clear_node_feat(G, *fts):
-        for n in G.nodes:
-            for ft in fts:
-                if key_exist(G.nodes[n], ft):
-                    G.nodes[n][ft] = None
 
-    clear_node_feat(mesh, 'edge_id', 'far', 'near')
+    def clear_node_feat(G, fts):
+        le_nodes = G.nodes
+        for k in le_nodes:
+            v = le_nodes[k]
+            for ft in fts:
+                if ft in v:
+                    v[ft] = None
+
+    clear_node_feat(mesh, ['edge_id', 'far', 'near'])
     bord_up, bord_down = mesh.graph['bord_up'], mesh.graph['bord_down']
     bord_left, bord_right = mesh.graph['bord_left'], mesh.graph['bord_right']
 
-    for node in mesh.nodes:
-        if mesh.neighbors(node).__length_hint__() == 4:
+    le_nodes = mesh.nodes
+
+    for node_key in le_nodes:
+        if mesh.neighbors(node_key).__length_hint__() == 4:
             continue
-        four_nes = [xx for xx in get_cross_nes(node[0], node[1]) if \
-                        is_inside(xx[0], xx[1], bord_up, bord_down, bord_left, bord_right) and \
-                            key_exist(info_on_pix, xx)]
-        [four_nes.remove((ne_node[0], ne_node[1])) for ne_node in mesh.neighbors(node)]
+        four_nes = [xx for xx in get_cross_nes(node_key[0], node_key[1]) if
+                    is_inside(xx[0], xx[1], bord_up, bord_down, bord_left, bord_right) and
+                    xx in info_on_pix]
+        [four_nes.remove((ne_node[0], ne_node[1])) for ne_node in mesh.neighbors(node_key)]
         for ne in four_nes:
             for info in info_on_pix[ne]:
-                assert mesh.has_node((ne[0], ne[1], info['depth'])), "No node"
-                if abs(node[2]) > abs(info['depth']):
-                    mesh.nodes[node]['near'] = append_element(mesh.nodes[node], 'near', (ne[0], ne[1], info['depth']))
+                assert mesh.has_node((ne[0], ne[1], info['depth'])), "No node_key"
+                ind_node = le_nodes[node_key]
+                if abs(node_key[2]) > abs(info['depth']):
+                    ind_node['near'] = append_element(ind_node, 'near', (ne[0], ne[1], info['depth']))
                 else:
-                    mesh.nodes[node]['far'] = append_element(mesh.nodes[node], 'far', (ne[0], ne[1], info['depth']))
+                    ind_node['far'] = append_element(ind_node, 'far', (ne[0], ne[1], info['depth']))
     if depth is not None:
         for key, value in info_on_pix.items():
             if depth[key[0], key[1]] != abs(value[0]['depth']):
@@ -1816,7 +1824,7 @@ def DL_inpaint_edge(mesh,
     return mesh, info_on_pix, specific_mask_nodes, new_edge_ccs, connnect_points_ccs, np_image
 
 
-def write_ply(image,
+def compute_ply(image,
               depth,
               int_mtx,
               ply_name,
@@ -1827,6 +1835,7 @@ def write_ply(image,
               depth_feat_model):
     depth = depth.astype(np.float64)
     input_mesh, xy2depth, image, depth = create_mesh(depth, image, int_mtx, config)
+
     H, W = input_mesh.graph['H'], input_mesh.graph['W']
     input_mesh = tear_edges(input_mesh, config['depth_threshold'], xy2depth)
     input_mesh, info_on_pix = generate_init_node(input_mesh, config, min_node_in_cc=200)
@@ -2179,7 +2188,7 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
 
     fov_in_rad = max(cam_mesh.graph['vFov'], cam_mesh.graph['hFov'])
     fov = (fov_in_rad * 180 / np.pi)
-    print(fov)
+    print("fov: " + str(fov))
     init_factor = 1
     factor = 1
     if config.get('canvas_resize_factor') is not None:

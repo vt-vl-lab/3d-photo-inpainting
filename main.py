@@ -9,8 +9,8 @@ from tqdm import tqdm
 import yaml
 import time
 import sys
-from mesh import write_ply, read_ply, output_3d_photo
-from utils import get_MiDaS_samples, read_MiDaS_depth, sparse_bilateral_filtering
+from mesh import compute_ply, read_ply, output_3d_photo
+from utils import get_MiDaS_samples, read_MiDaS_depth
 import torch
 import cv2
 from skimage.transform import resize
@@ -20,6 +20,7 @@ from networks import Inpaint_Color_Net, Inpaint_Depth_Net, Inpaint_Edge_Net
 from MiDaS.run import run_depth
 from MiDaS.monodepth_net import MonoDepthNet
 import MiDaS.MiDaS_utils as MiDaS_utils
+from bilateral_filtering import sparse_bilateral_filtering
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='argument.yml',help='Configure of post processing')
@@ -94,15 +95,15 @@ for idx in tqdm(range(len(sample_list))):
 
 
         print(f"Writing depth ply (and basically doing everything) at {time.time()}")
-        rt_info = write_ply(image,
-                            depth,
-                            sample['int_mtx'],
-                            mesh_fi,
-                            config,
-                            rgb_model,
-                            depth_edge_model,
-                            depth_edge_model,
-                            depth_feat_model)
+        rt_info = compute_ply(image,
+                              depth,
+                              sample['int_mtx'],
+                              mesh_fi,
+                              config,
+                              rgb_model,
+                              depth_edge_model,
+                              depth_edge_model,
+                              depth_feat_model)
 
         if rt_info is False:
             continue

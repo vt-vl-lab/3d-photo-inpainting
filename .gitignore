@@ -1,5 +1,6 @@
 *.prof
 *.pt
 mesh/
+video/
 checkpoints/
 *__pycache__/
