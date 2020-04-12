@@ -1835,7 +1835,7 @@ def DL_inpaint_edge(mesh,
     return mesh, info_on_pix, specific_mask_nodes, new_edge_ccs, connnect_points_ccs, np_image
 
 
-def compute_ply(image,
+def write_ply(image,
               depth,
               int_mtx,
               ply_name,
