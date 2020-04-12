@@ -10,7 +10,10 @@ import torch
 from torch import nn
 import matplotlib.pyplot as plt
 import re
-import cynetworkx as netx
+try:
+    import cynetworkx as netx
+except ImportError:
+    import networkx as netx
 from scipy.ndimage import gaussian_filter
 from skimage.feature import canny
 import collections

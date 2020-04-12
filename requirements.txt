@@ -2,6 +2,6 @@ opencv-python==4.2.0.32
 vispy==0.6.4
 moviepy==1.0.2
 transforms3d==0.3.1
-# networkx==2.3
-cynetworkx
+networkx==2.3
+# cynetworkx
 scikit-image

@@ -1,7 +1,11 @@
 import os
 import numpy as np
-# import cynetworkx as netx
-import cynetworkx as netx
+
+try:
+    import cynetworkx as netx
+except ImportError:
+    import networkx as netx
+
 import json
 import matplotlib.pyplot as plt
 import cv2
