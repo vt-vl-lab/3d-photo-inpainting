@@ -1,0 +1,5 @@
+*.prof
+*.pt
+mesh/
+checkpoints/
+*__pycache__/

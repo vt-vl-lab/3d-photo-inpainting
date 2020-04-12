@@ -7,6 +7,7 @@ import vispy
 import scipy.misc as misc
 from tqdm import tqdm
 import yaml
+import time
 import sys
 from mesh import write_ply, read_ply, output_3d_photo
 from utils import get_MiDaS_samples, read_MiDaS_depth, sparse_bilateral_filtering
@@ -37,12 +38,17 @@ if isinstance(config["gpu_ids"], int) and (config["gpu_ids"] >= 0):
 else:
     device = "cpu"
 
+print(f"running on device {device}")
+
 for idx in tqdm(range(len(sample_list))):
     depth = None
     sample = sample_list[idx]
     print("Current Source ==> ", sample['src_pair_name'])
     mesh_fi = os.path.join(config['mesh_folder'], sample['src_pair_name'] +'.ply')
     image = imageio.imread(sample['ref_img_fi'])
+
+    print(f"Running depth extraction at {time.time()}")
+
     run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'],
               config['MiDaS_model_ckpt'], MonoDepthNet, MiDaS_utils, target_w=640)
     config['output_h'], config['output_w'] = np.load(sample['depth_fi']).shape[:2]
@@ -63,24 +69,31 @@ for idx in tqdm(range(len(sample_list))):
         model = None
         torch.cuda.empty_cache()
         print("Start Running 3D_Photo ...")
+        print(f"Loading edge model at {time.time()}")
         depth_edge_model = Inpaint_Edge_Net(init_weights=True)
         depth_edge_weight = torch.load(config['depth_edge_model_ckpt'])
         depth_edge_model.load_state_dict(depth_edge_weight)
         depth_edge_model = depth_edge_model.to(device)
         depth_edge_model.eval()
 
+        print(f"Loading depth model at {time.time()}")
         depth_feat_model = Inpaint_Depth_Net()
         depth_feat_weight = torch.load(config['depth_feat_model_ckpt'])
         depth_feat_model.load_state_dict(depth_feat_weight, strict=True)
         depth_feat_model = depth_feat_model.to(device)
         depth_feat_model.eval()
         depth_feat_model = depth_feat_model.to(device)
+
+        print(f"Loading rgb model at {time.time()}")
         rgb_model = Inpaint_Color_Net()
         rgb_feat_weight = torch.load(config['rgb_feat_model_ckpt'])
         rgb_model.load_state_dict(rgb_feat_weight)
         rgb_model.eval()
         rgb_model = rgb_model.to(device)
         graph = None
+
+
+        print(f"Writing depth ply (and basically doing everything) at {time.time()}")
         rt_info = write_ply(image,
                             depth,
                             sample['int_mtx'],
@@ -90,6 +103,7 @@ for idx in tqdm(range(len(sample_list))):
                             depth_edge_model,
                             depth_edge_model,
                             depth_feat_model)
+
         if rt_info is False:
             continue
         rgb_model = None
@@ -101,6 +115,9 @@ for idx in tqdm(range(len(sample_list))):
         verts, colors, faces, Height, Width, hFov, vFov = read_ply(mesh_fi)
     else:
         verts, colors, faces, Height, Width, hFov, vFov = rt_info
+
+
+    print(f"Making video at {time.time()}")
     videos_poses, video_basename = copy.deepcopy(sample['tgts_poses']), sample['tgt_name']
     top = (config.get('original_h') // 2 - sample['int_mtx'][1, 2] * config['output_h'])
     left = (config.get('original_w') // 2 - sample['int_mtx'][0, 2] * config['output_w'])
