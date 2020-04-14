@@ -127,5 +127,5 @@ argument.yml
     - Action to apply depth edge inpainting model repeatedly. Sometimes inpainting depth 
       edge once results in short inpinated edge, apply depth edge inpainting repeatedly 
       could help you prolong the inpainted depth edge. 
-- `crop_border: 0.03`
-    - The fraction of pixels to crop out around the borders (default: 0.03 (3%)).
+- `crop_border: [0.03, 0.03, 0.05, 0.03]`
+    - The fraction of pixels to crop out around the borders `[top, left, bottom, right]`.

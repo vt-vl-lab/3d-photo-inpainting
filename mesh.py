@@ -2244,11 +2244,13 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
             img = img[anchor[0]:anchor[1], anchor[2]:anchor[3]]
             img = img[int(border[0]):int(border[1]), int(border[2]):int(border[3])]
 
-            if config['crop_border'] > 0.0:
+            if any(np.array(config['crop_border']) > 0.0):
                 H_c, W_c, _ = img.shape
-                offset_H = int(H_c * config['crop_border'])
-                offset_W = int(W_c * config['crop_border'])
-                img = img[offset_H:H_c-offset_H, offset_W:W_c-offset_W]
+                o_t = int(H_c * config['crop_border'][0])
+                o_l = int(W_c * config['crop_border'][1])
+                o_b = int(H_c * config['crop_border'][2])
+                o_r = int(W_c * config['crop_border'][3])
+                img = img[o_t:H_c-o_b, o_l:W_c-o_r]
                 img = cv2.resize(img, (W_c, H_c), interpolation=cv2.INTER_CUBIC)
 
             """
