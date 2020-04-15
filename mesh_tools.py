@@ -14,6 +14,8 @@ import cv2
 import scipy.misc as misc
 from skimage import io
 from functools import partial
+import vispy
+vispy.use(app='egl')
 from vispy import scene, io
 from vispy.scene import visuals
 from functools import reduce

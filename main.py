@@ -21,6 +21,8 @@ from MiDaS.run import run_depth
 from MiDaS.monodepth_net import MonoDepthNet
 import MiDaS.MiDaS_utils as MiDaS_utils
 from bilateral_filtering import sparse_bilateral_filtering
+import vispy
+vispy.use(app='egl')
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='argument.yml',help='Configure of post processing')
@@ -72,14 +74,16 @@ for idx in tqdm(range(len(sample_list))):
         print("Start Running 3D_Photo ...")
         print(f"Loading edge model at {time.time()}")
         depth_edge_model = Inpaint_Edge_Net(init_weights=True)
-        depth_edge_weight = torch.load(config['depth_edge_model_ckpt'])
+        depth_edge_weight = torch.load(config['depth_edge_model_ckpt'],
+                                       map_location=torch.device(device))
         depth_edge_model.load_state_dict(depth_edge_weight)
         depth_edge_model = depth_edge_model.to(device)
         depth_edge_model.eval()
 
         print(f"Loading depth model at {time.time()}")
         depth_feat_model = Inpaint_Depth_Net()
-        depth_feat_weight = torch.load(config['depth_feat_model_ckpt'])
+        depth_feat_weight = torch.load(config['depth_feat_model_ckpt'],
+                                       map_location=torch.device(device))
         depth_feat_model.load_state_dict(depth_feat_weight, strict=True)
         depth_feat_model = depth_feat_model.to(device)
         depth_feat_model.eval()
@@ -87,7 +91,8 @@ for idx in tqdm(range(len(sample_list))):
 
         print(f"Loading rgb model at {time.time()}")
         rgb_model = Inpaint_Color_Net()
-        rgb_feat_weight = torch.load(config['rgb_feat_model_ckpt'])
+        rgb_feat_weight = torch.load(config['rgb_feat_model_ckpt'],
+                                     map_location=torch.device(device))
         rgb_model.load_state_dict(rgb_feat_weight)
         rgb_model.eval()
         rgb_model = rgb_model.to(device)
