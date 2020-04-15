@@ -6,6 +6,8 @@ import matplotlib.pyplot as plt
 import cv2
 from skimage import io
 from functools import partial
+import vispy
+vispy.use(app='egl')
 from vispy import scene, io
 from vispy.scene import visuals
 from vispy.visuals.filters import Alpha
