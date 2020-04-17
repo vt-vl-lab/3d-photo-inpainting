@@ -1,5 +1,9 @@
 # [CVPR 2020] 3D Photography using Context-aware Layered Depth Inpainting
 
+[![Open 3DPhotoInpainting in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1706ToQrkIZshRSJSHvZ1RuCiM__YX3Bz)
+
+### [[Paper](https://arxiv.org/abs/2004.04727)] [[Project Website](https://shihmengli.github.io/3D-Photo-Inpainting/)] [[Google Colab](https://colab.research.google.com/drive/1706ToQrkIZshRSJSHvZ1RuCiM__YX3Bz)]
+
 <p align='center'>
 <img src='https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/3DPhoto_teaser.jpg' width='900'/>
 </p>
@@ -16,7 +20,6 @@ We propose a method for converting a single RGB-D input image into a 3D photo, i
 <br/>
 In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
-### [[Paper](https://drive.google.com/file/d/17ki_YAL1k5CaHHP3pIBFWvw-ztF4CCPP/view?usp=sharing)] [[Project Website](https://shihmengli.github.io/3D-Photo-Inpainting/)] [[Google Colab](https://colab.research.google.com/drive/1706ToQrkIZshRSJSHvZ1RuCiM__YX3Bz)]
 
 ## Prerequisites
 
