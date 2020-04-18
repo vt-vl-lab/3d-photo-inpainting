@@ -22,7 +22,7 @@ def run_depth(img_names, input_path, output_path, model_path, Net, utils, target
     print("initialize")
 
     # select device
-    device = torch.device("cpu")
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("device: %s" % device)
 
     # load network
