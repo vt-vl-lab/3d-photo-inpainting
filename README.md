@@ -68,7 +68,7 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
         - E.g. ```video/moon_circle.mp4```         
     - Rendered videos with dolly zoom-in effect
         - E.g. ```video/moon_dolly-zoom-in.mp4```
-        - Note: We choose the depth value locate at image center.
+        - Note: We choose the depth value at image center.
 4. (Optional) If you want to change the default configuration. Please read [`DOCUMENTATION.md`](DOCUMENTATION.md) and modified ```argument.yml```.
 
 
