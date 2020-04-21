@@ -1,6 +1,5 @@
 import numpy as np
 from functools import reduce
-from external.fast_any_all import any as fast_any
 
 def sparse_bilateral_filtering(
     depth, image, config, HR=False, mask=None, gsHR=True, edge_id=None, num_iter=None, num_gs_iter=None, spdb=False
