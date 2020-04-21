@@ -55,9 +55,10 @@ for idx in tqdm(range(len(sample_list))):
         config['gray_image'] = True
     else:
         config['gray_image'] = False
+    image = cv2.resize(image, (config['output_w'], config['output_h']), interpolation=cv2.INTER_AREA)
+    depth = read_MiDaS_depth(sample['depth_fi'], 3.0, config['output_h'], config['output_w'])
+    mean_loc_depth = depth[depth.shape[0]//2, depth.shape[1]//2]
     if not(config['load_ply'] is True and os.path.exists(mesh_fi)):
-        image = cv2.resize(image, (config['output_w'], config['output_h']), interpolation=cv2.INTER_AREA)
-        depth = read_MiDaS_depth(sample['depth_fi'], 3.0, config['output_h'], config['output_w'])
         vis_photos, vis_depths = sparse_bilateral_filtering(depth.copy(), image.copy(), config, num_iter=config['sparse_iter'], spdb=False)
         depth = vis_depths[-1]
         model = None
@@ -112,4 +113,5 @@ for idx in tqdm(range(len(sample_list))):
     normal_canvas, all_canvas = output_3d_photo(verts.copy(), colors.copy(), faces.copy(), copy.deepcopy(Height), copy.deepcopy(Width), copy.deepcopy(hFov), copy.deepcopy(vFov),
                         copy.deepcopy(sample['tgt_pose']), sample['video_postfix'], copy.deepcopy(sample['ref_pose']), copy.deepcopy(config['video_folder']),
                         image.copy(), copy.deepcopy(sample['int_mtx']), config, image,
-                        videos_poses, video_basename, config.get('original_h'), config.get('original_w'), border=border, depth=depth, normal_canvas=normal_canvas, all_canvas=all_canvas)
+                        videos_poses, video_basename, config.get('original_h'), config.get('original_w'), border=border, depth=depth, normal_canvas=normal_canvas, all_canvas=all_canvas,
+                        mean_loc_depth=mean_loc_depth)

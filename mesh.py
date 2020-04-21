@@ -895,17 +895,6 @@ def context_and_holes(mesh, edge_ccs, config, specific_edge_id, specific_edge_lo
     for edge_id, edge_cc in enumerate(edge_ccs):
         for edge_node in edge_cc:
             edge_maps[edge_node[0], edge_node[1]] = edge_id
-    mask_time = 0
-    context_time = 0
-    intouch_time = 0
-    redundant_time = 0
-    noncont_time = 0
-    ext_first_time = 0
-    ext_modified_time = 0
-    ext_mask_time = 0
-    ext_context_time = 0
-    ext_copy_time = 0
-    inpaint_depth_time = 0
 
     context_ccs = [set() for x in range(len(edge_ccs))]
     extend_context_ccs = [set() for x in range(len(edge_ccs))]
@@ -1340,9 +1329,7 @@ def context_and_holes(mesh, edge_ccs, config, specific_edge_id, specific_edge_lo
                             bool(tmp_mask_map[ne[0], ne[1]]) is False and \
                             bool(tmp_context_map[ne[0], ne[1]]) is False and \
                             bool(forbidden_map[ne[0], ne[1]]) is True:
-
                             new_tmp_context_nodes.append(ne)
-
                             tmp_context_map[ne[0], ne[1]] = True
                 accum_context_cc.extend(new_tmp_context_nodes)
                 for node in tmp_invalid_context_nodes:
@@ -2164,7 +2151,7 @@ class Canvas_view():
 
 def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, video_traj_types, ref_pose,
                     output_dir, ref_image, int_mtx, config, image, videos_poses, video_basename, original_H=None, original_W=None,
-                    border=None, depth=None, normal_canvas=None, all_canvas=None):
+                    border=None, depth=None, normal_canvas=None, all_canvas=None, mean_loc_depth=None):
 
     cam_mesh = netx.Graph()
     cam_mesh.graph['H'] = Height
@@ -2230,6 +2217,7 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
                   0,
                   img.shape[1]]
     anchor = np.array(anchor) * factor
+    plane_width = np.tan(fov_in_rad/2.) * np.abs(mean_loc_depth)
     for video_pose, video_traj_type in zip(videos_poses, video_traj_types):
         stereos = []
         tops = []; buttoms = []; lefts = []; rights = []
@@ -2238,6 +2226,12 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
             axis, angle = transforms3d.axangles.mat2axangle(rel_pose[0:3, 0:3])
             normal_canvas.rotate(axis=axis, angle=(angle*180)/np.pi)
             normal_canvas.translate(rel_pose[:3,3])
+            new_mean_loc_depth = mean_loc_depth - float(rel_pose[2, 3])
+            if 'dolly' in video_traj_type:
+                new_fov = float((np.arctan2(plane_width, np.array([np.abs(new_mean_loc_depth)])) * 180. / np.pi) * 2)
+                normal_canvas.reinit_camera(new_fov)
+            else:
+                normal_canvas.reinit_camera(fov)
             normal_canvas.view_changed()
             img = normal_canvas.render()
             img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_CUBIC)
