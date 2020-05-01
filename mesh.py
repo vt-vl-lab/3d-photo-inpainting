@@ -929,7 +929,8 @@ def context_and_holes(mesh, edge_ccs, config, specific_edge_id, specific_edge_lo
     else:
         background_thickness = config['background_thickness_2']
         context_thickness = config['context_thickness_2']
-
+        
+    mesh_nodes = mesh.nodes
     for edge_id, edge_cc in enumerate(edge_ccs):
         if context_thickness == 0 or (len(specific_edge_id) > 0 and edge_id not in specific_edge_id):
             continue
