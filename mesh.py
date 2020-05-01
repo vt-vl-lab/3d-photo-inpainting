@@ -929,7 +929,7 @@ def context_and_holes(mesh, edge_ccs, config, specific_edge_id, specific_edge_lo
     else:
         background_thickness = config['background_thickness_2']
         context_thickness = config['context_thickness_2']
-        
+
     mesh_nodes = mesh.nodes
     for edge_id, edge_cc in enumerate(edge_ccs):
         if context_thickness == 0 or (len(specific_edge_id) > 0 and edge_id not in specific_edge_id):
@@ -2184,7 +2184,7 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
 
     fov_in_rad = max(cam_mesh.graph['vFov'], cam_mesh.graph['hFov'])
     fov = (fov_in_rad * 180 / np.pi)
-    print(fov)
+    print("fov: " + str(fov))
     init_factor = 1
     factor = 1
     if config.get('canvas_resize_factor') is not None:
