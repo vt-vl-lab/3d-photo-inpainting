@@ -7,6 +7,7 @@ import vispy
 import scipy.misc as misc
 from tqdm import tqdm
 import yaml
+import time
 import sys
 from mesh import write_ply, read_ply, output_3d_photo
 from utils import get_MiDaS_samples, read_MiDaS_depth
