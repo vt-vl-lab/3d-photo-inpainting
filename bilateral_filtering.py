@@ -213,4 +213,3 @@ def rolling_window(a, window, strides):
     _strides = [acc_shape(i)*s*a.itemsize for i,s in enumerate(strides)] + list(a.strides)
 
     return np.lib.stride_tricks.as_strided(a, shape=shape, strides=_strides)
-
