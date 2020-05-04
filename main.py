@@ -87,7 +87,6 @@ for idx in tqdm(range(len(sample_list))):
         depth_feat_model = depth_feat_model.to(device)
         depth_feat_model.eval()
         depth_feat_model = depth_feat_model.to(device)
-
         print(f"Loading rgb model at {time.time()}")
         rgb_model = Inpaint_Color_Net()
         rgb_feat_weight = torch.load(config['rgb_feat_model_ckpt'],

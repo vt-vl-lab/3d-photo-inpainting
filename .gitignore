@@ -1,0 +1,17 @@
+#ignore all kind of files
+*.*
+#except php files
+!*.py
+!*.yml
+!*.txt
+!*.md
+!*LICENSE
+!image/moon.jpg
+!depth/moon.npy
+!video/moon_swing.mp4
+!video/moon_zoom-in.mp4
+!video/moon_dolly-zoom-in.mp4
+!video/moon_straight-line.mp4
+!video/moon.mp4
+!video/moon_circle.mp4
+!misc/moon_40.gif
