@@ -1,6 +1,10 @@
 import os
 import numpy as np
-import networkx as netx
+try:
+    import cynetworkx as netx
+except ImportError:
+    import networkx as netx
+
 import json
 import scipy.misc as misc
 #import OpenEXR
@@ -28,12 +32,12 @@ from scipy import ndimage
 import time
 import transforms3d
 
-def relabel_node(mesh, cur_node, new_node):
+def relabel_node(mesh, nodes, cur_node, new_node):
     if cur_node == new_node:
         return mesh
     mesh.add_node(new_node)
-    for key, value in mesh.nodes[cur_node].items():
-        mesh.nodes[new_node][key] = value
+    for key, value in nodes[cur_node].items():
+        nodes[new_node][key] = value
     for ne in mesh.neighbors(cur_node):
         mesh.add_edge(new_node, ne)
     mesh.remove_node(cur_node)
@@ -42,20 +46,21 @@ def relabel_node(mesh, cur_node, new_node):
 
 def filter_edge(mesh, edge_ccs, config, invalid=False):
     context_ccs = [set() for _ in edge_ccs]
+    mesh_nodes = mesh.nodes
     for edge_id, edge_cc in enumerate(edge_ccs):
         if config['context_thickness'] == 0:
             continue
         edge_group = {}
         for edge_node in edge_cc:
-            far_nodes = mesh.nodes[edge_node].get('far')
+            far_nodes = mesh_nodes[edge_node].get('far')
             if far_nodes is None:
                 continue
             for far_node in far_nodes:
                 context_ccs[edge_id].add(far_node)
-                if mesh.nodes[far_node].get('edge_id') is not None:
-                    if edge_group.get(mesh.nodes[far_node]['edge_id']) is None:
-                        edge_group[mesh.nodes[far_node]['edge_id']] = set()
-                    edge_group[mesh.nodes[far_node]['edge_id']].add(far_node)
+                if mesh_nodes[far_node].get('edge_id') is not None:
+                    if edge_group.get(mesh_nodes[far_node]['edge_id']) is None:
+                        edge_group[mesh_nodes[far_node]['edge_id']] = set()
+                    edge_group[mesh_nodes[far_node]['edge_id']].add(far_node)
         if len(edge_cc) > 2:
             for edge_key in [*edge_group.keys()]:
                 if len(edge_group[edge_key]) == 1:
@@ -206,18 +211,16 @@ def extrapolate(global_mesh,
     hxs, hys = np.where(output_raw_edge * mask > 0)
     valid_map = mask + context
     for hx, hy in zip(hxs, hys):
-        node = (hx ,hy)
+        node = (hx, hy)
         mesh.add_node((hx, hy))
         eight_nes = [ne for ne in [(hx + 1, hy), (hx - 1, hy), (hx, hy + 1), (hx, hy - 1), \
                                    (hx + 1, hy + 1), (hx - 1, hy - 1), (hx - 1, hy + 1), (hx + 1, hy - 1)]\
-                        if 0 <= ne[0] < output_raw_edge.shape[0] and 0 <= ne[1] < output_raw_edge.shape[1] and 0 < output_raw_edge[ne[0], ne[1]]] # or end_depth_maps[ne[0], ne[1]] != 0]
+                        if 0 <= ne[0] < output_raw_edge.shape[0] and 0 <= ne[1] < output_raw_edge.shape[1] and 0 < output_raw_edge[ne[0], ne[1]]]
         for ne in eight_nes:
             mesh.add_edge(node, ne, length=np.hypot(ne[0] - hx, ne[1] - hy))
             if end_depth_maps[ne[0], ne[1]] != 0:
                 mesh.nodes[ne[0], ne[1]]['cnt'] = True
                 mesh.nodes[ne[0], ne[1]]['depth'] = end_depth_maps[ne[0], ne[1]]
-                # if (ne[0] + all_anchor[0], ne[1] + all_anchor[2]) == (559, 60):
-                #     import pdb; pdb.set_trace()
     ccs = [*netx.connected_components(mesh)]
     end_pts = []
     for cc in ccs:
@@ -789,7 +792,7 @@ def depth_inpainting(context_cc, extend_context_cc, erode_context_cc, mask_cc, m
 def update_info(mapping_dict, info_on_pix, *meshes):
     rt_meshes = []
     for mesh in meshes:
-        rt_meshes.append(relabel_node(mesh, [*mapping_dict.keys()][0], [*mapping_dict.values()][0]))
+        rt_meshes.append(relabel_node(mesh, mesh.nodes, [*mapping_dict.keys()][0], [*mapping_dict.values()][0]))
     x, y, _ = [*mapping_dict.keys()][0]
     info_on_pix[(x, y)][0]['depth'] = [*mapping_dict.values()][0][2]
 
@@ -946,7 +949,6 @@ def get_edge_from_nodes(context_cc, erode_context_cc, mask_cc, edge_cc, extend_e
     mask = np.zeros((H, W))
     rgb = np.zeros((H, W, 3))
     disp = np.zeros((H, W))
-    real_disp = np.zeros((H, W))
     depth = np.zeros((H, W))
     real_depth = np.zeros((H, W))
     edge = np.zeros((H, W))
