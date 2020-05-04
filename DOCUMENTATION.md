@@ -75,6 +75,7 @@ argument.yml
     - Action to load existed mesh (.ply) file
 - `save_ply: True`
     - Action to store the output mesh (.ply) file
+    - Disable this option `save_ply: False` to reduce the computational time.
 - `inference_video: True`
     - Action to rendered the output video
 - `gpu_ids: 0`
