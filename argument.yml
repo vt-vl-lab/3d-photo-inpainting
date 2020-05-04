@@ -9,7 +9,7 @@ y_shift_range: [0.00, 0.00, -0.02, -0.00]
 z_shift_range: [-0.05, -0.05, -0.07, -0.07]
 traj_types: ['double-straight-line', 'double-straight-line', 'circle', 'circle']
 video_postfix: ['dolly-zoom-in', 'zoom-in', 'circle', 'swing']
-specific: ''
+specific: 'moon'
 longer_side_len: 960
 src_folder: image
 depth_folder: depth

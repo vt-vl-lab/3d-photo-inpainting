@@ -2188,10 +2188,8 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
     fov = (fov_in_rad * 180 / np.pi)
     print("fov: " + str(fov))
     init_factor = 1
-    factor = 1
     if config.get('canvas_resize_factor') is not None:
         init_factor = config['canvas_resize_factor']
-        factor = config['canvas_resize_factor']
     if (cam_mesh.graph['original_H'] is not None) and (cam_mesh.graph['original_W'] is not None):
         canvas_w = cam_mesh.graph['original_W']
         canvas_h = cam_mesh.graph['original_H']
@@ -2205,7 +2203,7 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
                                     faces,
                                     colors,
                                     canvas_size=canvas_size,
-                                    factor=factor,
+                                    factor=init_factor,
                                     bgcolor='gray',
                                     proj='perspective')
     else:
@@ -2214,7 +2212,6 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
     img = normal_canvas.render()
     backup_img, backup_all_img, all_img_wo_bound = img.copy(), img.copy() * 0, img.copy() * 0
     img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_AREA)
-    factor = 1
     if border is None:
         border = [0, img.shape[0], 0, img.shape[1]]
     H, W = cam_mesh.graph['H'], cam_mesh.graph['W']
@@ -2227,16 +2224,16 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
         img_w_len = img_h_len / aspect_ratio
         anchor = [0,
                   img.shape[0],
-                  int(max(0, int((img.shape[1]/factor)//2 - img_w_len//2))),
-                  int(min(int((img.shape[1]/factor)//2 + img_w_len//2), (img.shape[1]/factor)-1))]
+                  int(max(0, int((img.shape[1])//2 - img_w_len//2))),
+                  int(min(int((img.shape[1])//2 + img_w_len//2), (img.shape[1])-1))]
     elif aspect_ratio <= 1:
         img_w_len = cam_mesh.graph['W'] if cam_mesh.graph.get('original_W') is None else cam_mesh.graph['original_W']
         img_h_len = img_w_len * aspect_ratio
-        anchor = [int(max(0, int((img.shape[0]/factor)//2 - img_h_len//2))),
-                  int(min(int((img.shape[0]/factor)//2 + img_h_len//2), (img.shape[0]/factor)-1)),
+        anchor = [int(max(0, int((img.shape[0])//2 - img_h_len//2))),
+                  int(min(int((img.shape[0])//2 + img_h_len//2), (img.shape[0])-1)),
                   0,
                   img.shape[1]]
-    anchor = np.array(anchor) * factor
+    anchor = np.array(anchor)
     plane_width = np.tan(fov_in_rad/2.) * np.abs(mean_loc_depth)
     for video_pose, video_traj_type in zip(videos_poses, video_traj_types):
         stereos = []
@@ -2254,7 +2251,7 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
                 normal_canvas.reinit_camera(fov)
             normal_canvas.view_changed()
             img = normal_canvas.render()
-            img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_CUBIC)
+            img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_LINEAR)
             img = img[anchor[0]:anchor[1], anchor[2]:anchor[3]]
             img = img[int(border[0]):int(border[1]), int(border[2]):int(border[3])]
 
