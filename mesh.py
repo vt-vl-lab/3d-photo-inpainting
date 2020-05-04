@@ -2188,8 +2188,8 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
     fov = (fov_in_rad * 180 / np.pi)
     print("fov: " + str(fov))
     init_factor = 1
-    if config.get('canvas_resize_factor') is not None:
-        init_factor = config['canvas_resize_factor']
+    if config.get('anti_flickering') is True:
+        init_factor = 3
     if (cam_mesh.graph['original_H'] is not None) and (cam_mesh.graph['original_W'] is not None):
         canvas_w = cam_mesh.graph['original_W']
         canvas_h = cam_mesh.graph['original_H']
@@ -2251,7 +2251,8 @@ def output_3d_photo(verts, colors, faces, Height, Width, hFov, vFov, tgt_poses, 
                 normal_canvas.reinit_camera(fov)
             normal_canvas.view_changed()
             img = normal_canvas.render()
-            img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_LINEAR)
+            img = cv2.GaussianBlur(img,(int(init_factor//2 * 2 + 1), int(init_factor//2 * 2 + 1)), 0)
+            img = cv2.resize(img, (int(img.shape[1] / init_factor), int(img.shape[0] / init_factor)), interpolation=cv2.INTER_AREA)
             img = img[anchor[0]:anchor[1], anchor[2]:anchor[3]]
             img = img[int(border[0]):int(border[1]), int(border[2]):int(border[3])]
 

@@ -129,3 +129,6 @@ argument.yml
       could help you prolong the inpainted depth edge. 
 - `crop_border: [0.03, 0.03, 0.05, 0.03]`
     - The fraction of pixels to crop out around the borders `[top, left, bottom, right]`.
+- `anti_flickering: True`
+    - Action to avoid flickering effect in the output video. 
+    - This may result in longer computational time in rendering phase.
