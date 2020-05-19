@@ -57,8 +57,12 @@ For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATI
     - Note: The 3D photo generation process usually takes about 2-3 minutes depending on the available computing resources.
 3. The results are stored in the following directories:
     - Corresponding depth map estimated by [MiDaS](https://github.com/intel-isl/MiDaS.git) 
-        - E.g. ```depth/moon.npy```
-    - Inpainted 3D mesh
+        - E.g. ```depth/moon.npy```, ```depth/moon.png```
+        - User could edit ```depth/moon.png``` manually. 
+            - Remember to set the following two flags as listed below if user wants to use manually edited ```depth/moon.png``` as input for 3D Photo.
+                - `depth_format: '.png'`
+                - `require_midas: False`
+    - Inpainted 3D mesh (Optional: User need to switch on the flag `save_ply`)
         - E.g. ```mesh/moon.ply```
     - Rendered videos with zoom-in motion
         - E.g. ```video/moon_zoom-in.mp4```

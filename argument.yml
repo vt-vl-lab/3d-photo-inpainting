@@ -21,6 +21,8 @@ inference_video: True
 gpu_ids: 0
 offscreen_rendering: False
 img_format: '.jpg'
+depth_format: '.npy'
+require_midas: True
 depth_threshold: 0.04
 ext_edge_threshold: 0.002
 sparse_iter: 5

@@ -85,6 +85,15 @@ argument.yml
     - Sometimes, using off-screen rendering result in longer execution time.
 - `img_format: '.jpg'`
     - Input image format.
+- `depth_format: '.npy'`
+    - Input depth (disparity) format. Use NumPy array file as default.
+    - If the user wants to edit the depth (disparity) map manually, we provide `.png` format depth (disparity) map.
+        - Remember to switch this parameter from `.npy` to `.png` when using depth (disparity) map with `.png` format.
+- `require_midas: True`
+    - Set it to `True` if the user wants to use depth map estimated by `MiDaS`.
+    - Set it to `False` if the user wants to use manually edited depth map.
+    - If the user wants to edit the depth (disparity) map manually, we provide `.png` format depth (disparity) map.
+        - Remember to switch this parameter from `True` to `False` when using manually edited depth map.
 - `depth_threshold: 0.04`
     - A threshold in disparity, adjacent two pixels are discontinuity pixels 
       if the difference between them excceed this number.

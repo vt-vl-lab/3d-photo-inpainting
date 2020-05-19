@@ -165,7 +165,7 @@ def resize_depth(depth, width, height):
 
     return depth_resized
 
-def write_depth(path, depth, image, bits=1):
+def write_depth(path, depth, bits=1):
     """Write depth map to pfm and png file.
 
     Args:
@@ -188,6 +188,5 @@ def write_depth(path, depth, image, bits=1):
         cv2.imwrite(path + ".png", out.astype("uint8"))
     elif bits == 2:
         cv2.imwrite(path + ".png", out.astype("uint16"))
-        imageio.imsave(path + ".jpg", image)
         
     return

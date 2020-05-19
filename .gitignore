@@ -8,6 +8,7 @@
 !*LICENSE
 !image/moon.jpg
 !depth/moon.npy
+!depth/moon.png
 !video/moon_swing.mp4
 !video/moon_zoom-in.mp4
 !video/moon_dolly-zoom-in.mp4

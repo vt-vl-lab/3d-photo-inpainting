@@ -62,7 +62,7 @@ def run_depth(img_names, input_path, output_path, model_path, Net, utils, target
             output_path, os.path.splitext(os.path.basename(img_name))[0]
         )
         np.save(filename + '.npy', depth)
-        # utils.write_depth(filename, depth, img, bits=2)
+        utils.write_depth(filename, depth, bits=2)
 
     print("finished")
 

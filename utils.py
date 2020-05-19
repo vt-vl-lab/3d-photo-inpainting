@@ -869,7 +869,7 @@ def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_cer
                 continue
         samples.append({})
         sdict = samples[-1]            
-        sdict['depth_fi'] = os.path.join(depth_folder, seq_dir + '.npy')
+        sdict['depth_fi'] = os.path.join(depth_folder, seq_dir + config['depth_format'])
         sdict['ref_img_fi'] = os.path.join(image_folder, seq_dir + config['img_format'])
         H, W = imageio.imread(sdict['ref_img_fi']).shape[:2]
         sdict['int_mtx'] = np.array([[max(H, W), 0, W//2], [0, max(H, W), H//2], [0, 0, 1]]).astype(np.float32)
@@ -940,8 +940,10 @@ def smooth_cntsyn_gap(init_depth_map, mask_region, context_region, init_mask_reg
     return depth_map
 
 def read_MiDaS_depth(disp_fi, disp_rescale=10., h=None, w=None):
-    disp = np.load(disp_fi)
-    # import pdb; pdb.set_trace()
+    if 'npy' in os.path.splitext(disp_fi)[-1]:
+        disp = np.load(disp_fi)
+    else:
+        disp = imageio.imread(disp_fi).astype(np.float32)
     disp = disp - disp.min()
     disp = cv2.blur(disp / disp.max(), ksize=(3, 3)) * disp.max()
     disp = (disp / disp.max()) * disp_rescale
