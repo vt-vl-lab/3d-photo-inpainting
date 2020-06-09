@@ -1,5 +1,6 @@
 name: 3DP
 channels:
+  - anaconda
   - menpo
   - conda-forge
   - pytorch
@@ -117,6 +118,7 @@ dependencies:
   - libcblas=3.8.0=15_mkl
   - libclang=9.0.1=default_hf44288c_0
   - libcurl=7.69.1=h1dcc11c_0
+  - libdrm-cos6-x86_64=2.4.65=hd39d64f_0
   - libiconv=1.15=hfa6e2cd_1006
   - liblapack=3.8.0=15_mkl
   - liblapacke=3.8.0=15_mkl
@@ -128,6 +130,8 @@ dependencies:
   - libssh2=1.9.0=h3235a2c_2
   - libtiff=4.1.0=h885aae3_6
   - libwebp=1.0.2=hfa6e2cd_5
+  - libx11-common-cos6-x86_64=1.6.4=h023ea50_0
+  - libx11-cos6-x86_64=1.6.4=h64a1553_0
   - libxml2=2.9.10=h5d81f1c_1
   - libxslt=1.1.33=h579f668_1
   - llvmlite=0.32.0=py37hc8dfbb8_0
@@ -145,6 +149,9 @@ dependencies:
   - matplotlib-base=3.2.1=py37h911224e_0
   - mccabe=0.6.1=py_1
   - menuinst=1.4.16=py37_0
+  - mesa-libegl-cos6-x86_64=11.0.7=1
+  - mesa-libgbm-cos6-x86_64=11.0.7=0
+  - mesa-libgl-cos6-x86_64=11.0.7=h045e36e_0
   - mistune=0.8.4=py37h8055547_1001
   - mkl=2020.0=166
   - mkl-service=2.3.0=py37hb782905_0
@@ -215,6 +222,7 @@ dependencies:
   - pylint=2.5.2=py37hc8dfbb8_0
   - pynacl=1.3.0=py37h2fa13f4_1001
   - pyodbc=4.0.30=py37h6538335_0
+  - pyopengl=3.1.5=py_0
   - pyopenssl=19.1.0=py_1
   - pyparsing=2.4.7=pyh9f0ad1d_0
   - pyqt=5.12.3=py37h1834ac0_3
@@ -236,7 +244,7 @@ dependencies:
   - python-language-server=0.31.10=py37hc8dfbb8_0
   - python-libarchive-c=2.9=py37_0
   - python_abi=3.7=1_cp37m
-  - pytorch=1.4.0=py3.7_cuda101_cudnn7_0
+  - pytorch=1.5.0=py3.7_cuda101_cudnn7_0
   - pytz=2020.1=pyh9f0ad1d_0
   - pywavelets=1.1.1=py37h44b1f71_1
   - pywin32=227=py37hfa6e2cd_0
@@ -291,7 +299,7 @@ dependencies:
   - tk=8.6.10=hfa6e2cd_0
   - toml=0.10.1=pyh9f0ad1d_0
   - toolz=0.10.0=py_0
-  - torchvision=0.5.0=py37_cu101
+  - torchvision=0.6.0=py37_cu101
   - tornado=6.0.4=py37hfa6e2cd_0
   - tqdm=4.46.1=pyh9f0ad1d_0
   - traitlets=4.3.3=py37hc8dfbb8_1
@@ -331,10 +339,32 @@ dependencies:
   - zope.interface=5.1.0=py37h8055547_0
   - zstd=1.4.4=h9f78265_3
   - pip:
+    - absl-py==0.9.0
+    - astunparse==1.6.3
+    - cachetools==4.1.0
     - fa2==0.3.5
+    - gast==0.3.3
+    - google-auth==1.16.1
+    - google-auth-oauthlib==0.4.1
+    - google-pasta==0.2.0
+    - grpcio==1.29.0
+    - keras-preprocessing==1.1.2
+    - markdown==3.2.2
+    - oauthlib==3.1.0
+    - opt-einsum==3.2.1
+    - protobuf==3.12.2
+    - pyasn1==0.4.8
+    - pyasn1-modules==0.2.8
     - pyqt5-sip==4.19.18
     - pyqtchart==5.12
     - pyqtwebengine==5.12.1
+    - requests-oauthlib==1.3.0
+    - rsa==4.0
     - scikit-image==0.17.2
+    - tensorboard==2.2.2
+    - tensorboard-plugin-wit==1.6.0.post3
+    - tensorflow==2.2.0
+    - tensorflow-estimator==2.2.0
+    - termcolor==1.1.0
 prefix: C:\ProgramData\Anaconda3\envs\3DP
 
