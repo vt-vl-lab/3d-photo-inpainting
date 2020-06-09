@@ -18,7 +18,7 @@ import imageio
 import copy
 from networks import Inpaint_Color_Net, Inpaint_Depth_Net, Inpaint_Edge_Net
 from MiDaS.run import run_depth
-from MiDaS.monodepth_net import MonoDepthNet
+from  MiDaS.midas_net import MidasNet
 import MiDaS.MiDaS_utils as MiDaS_utils
 from bilateral_filtering import sparse_bilateral_filtering
 
@@ -52,7 +52,7 @@ for idx in tqdm(range(len(sample_list_jpg))):
     print(f"Running depth extraction at {time.time()}")
     if config['require_midas'] is True:
         run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'],
-                  config['MiDaS_model_ckpt'], MonoDepthNet, MiDaS_utils, target_w=640)
+                  config['MiDaS_model_ckpt'], MidasNet, MiDaS_utils, target_w=640)
     if 'npy' in config['depth_format']:
         config['output_h'], config['output_w'] = np.load(sample['depth_fi']).shape[:2]
     else:
@@ -147,7 +147,7 @@ for idx in tqdm(range(len(sample_list_jpeg))):
     print(f"Running depth extraction at {time.time()}")
     if config['require_midas'] is True:
         run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'],
-                  config['MiDaS_model_ckpt'], MonoDepthNet, MiDaS_utils, target_w=640)
+                  config['MiDaS_model_ckpt'], MidasNet, MiDaS_utils, target_w=640)
     if 'npy' in config['depth_format']:
         config['output_h'], config['output_w'] = np.load(sample['depth_fi']).shape[:2]
     else:
@@ -242,7 +242,7 @@ for idx in tqdm(range(len(sample_list_png))):
     print(f"Running depth extraction at {time.time()}")
     if config['require_midas'] is True:
         run_depth([sample['ref_img_fi']], config['src_folder'], config['depth_folder'],
-                  config['MiDaS_model_ckpt'], MonoDepthNet, MiDaS_utils, target_w=640)
+                  config['MiDaS_model_ckpt'], MidasNet, MiDaS_utils, target_w=640)
     if 'npy' in config['depth_format']:
         config['output_h'], config['output_w'] = np.load(sample['depth_fi']).shape[:2]
     else:
