@@ -25,10 +25,7 @@ In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 - [Cuda Support](https://github.com/vt-vl-lab/3d-photo-inpainting/pull/30)
 - no need to specify file type - `.png` and `.jpg` will work automagicly
 - [MiDaS](https://github.com/intel-isl/MiDaS/releases/tag/v1) upgraded to [MiDaS v2](https://github.com/intel-isl/MiDaS/releases/tag/v2)
-- **MiDaS:** 
-![](MiDaS.gif)
-- **MiDaS v2:** 
-![](MiDaS-v2.gif)
+
 
 ## Prerequisites
 
