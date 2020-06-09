@@ -20,21 +20,33 @@ We propose a method for converting a single RGB-D input image into a 3D photo, i
 <br/>
 In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
+## Update
+- This branch includes a `environment.yml` file to help with repo installation on Windows 10 
+- [Cuda Support](https://github.com/vt-vl-lab/3d-photo-inpainting/pull/30)
+- no need to specify file type - `.png` and `.jpg` will work automagicly
+- [MiDaS](https://github.com/intel-isl/MiDaS/releases/tag/v1) upgraded to [MiDaS v2](https://github.com/intel-isl/MiDaS/releases/tag/v2)
+- **MiDaS:** ![](MiDaS.gif)
+- **MiDaS v2:** ![](MiDaS-v2.gif)
 
 ## Prerequisites
 
-- Linux (tested on Ubuntu 18.04.4 LTS)
+- Linux (tested on Ubuntu 18.04.4 LTS) or Windows 10
 - Anaconda
 - Python 3.7 (tested on 3.7.4)
 - PyTorch 1.4.0 (tested on 1.4.0 for execution)
 
 and the Python dependencies listed in [requirements.txt](requirements.txt)
 - To get started, please run the following commands:
+**Linux**
     ```bash
     conda create -n 3DP python=3.7 anaconda
     conda activate 3DP
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit==10.1.243 -c pytorch
+    ```
+    **Windows 10**
+    ```bash
+   conda env create --file environment.yml
     ```
 - Next, please download the model weight using the following command:
     ```bash
@@ -48,7 +60,7 @@ This should allow to execute our results.
 For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATION.md).
 
 ## Execute
-1. Put ```.jpg``` files (e.g., test.jpg) into the ```image``` folder. 
+1. Put ```.jpg or .png``` files (e.g., test.jpg) into the ```image``` folder. 
     - E.g., `image/moon.jpg`
 2. Run the following command
     ```bash
