@@ -23,6 +23,7 @@ from MiDaS.monodepth_net import MonoDepthNet # model to compute depth
 import MiDaS.MiDaS_utils as MiDaS_utils
 from bilateral_filtering import sparse_bilateral_filtering
 
+#wandb
 import wandb
 wandb.login()
 
