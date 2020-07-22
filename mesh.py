@@ -1826,6 +1826,7 @@ def write_ply(image,
               depth_edge_model,
               depth_edge_model_init,
               depth_feat_model):
+              
     depth = depth.astype(np.float64)
     input_mesh, xy2depth, image, depth = create_mesh(depth, image, int_mtx, config)
 

@@ -835,6 +835,7 @@ def clean_far_edge(mask_edge, mask_edge_with_id, context_edge, mask, info_on_pix
 
     return far_edge, uncleaned_far_edge, far_edge_with_id, near_edge_with_id
 
+# called by main after creating some directories.
 def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_certain=None):
     lines = [os.path.splitext(os.path.basename(xx))[0] for xx in glob.glob(os.path.join(image_folder, '*' + config['img_format']))]
     samples = []
@@ -949,7 +950,7 @@ def read_MiDaS_depth(disp_fi, disp_rescale=10., h=None, w=None):
     disp = (disp / disp.max()) * disp_rescale
     if h is not None and w is not None:
         disp = resize(disp / disp.max(), (h, w), order=1) * disp.max()
-    depth = 1. / np.maximum(disp, 0.05)
+    depth = 1. / np.maximum(disp, 0.05) # normalize depth 
 
     return depth
 

@@ -1,5 +1,5 @@
 """Compute depth maps for images in the input folder.
-"""
+""" 
 import os
 import glob
 import torch

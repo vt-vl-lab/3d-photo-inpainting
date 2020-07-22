@@ -2,33 +2,45 @@ depth_edge_model_ckpt: checkpoints/edge-model.pth
 depth_feat_model_ckpt: checkpoints/depth-model.pth
 rgb_feat_model_ckpt: checkpoints/color-model.pth
 MiDaS_model_ckpt: MiDaS/model.pt
-fps: 40
+
+fps: 40 
 num_frames: 240
 x_shift_range: [0.00, 0.00, -0.02, -0.02]
 y_shift_range: [0.00, 0.00, -0.02, -0.00]
 z_shift_range: [-0.05, -0.05, -0.07, -0.07]
+
 traj_types: ['double-straight-line', 'double-straight-line', 'circle', 'circle']
 video_postfix: ['dolly-zoom-in', 'zoom-in', 'circle', 'swing']
+
 specific: ''
 longer_side_len: 960
+
 src_folder: image
 depth_folder: depth
 mesh_folder: mesh
 video_folder: video
+
 load_ply: False
 save_ply: True
 inference_video: True
+
 gpu_ids: 0
+
 offscreen_rendering: False
+
 img_format: '.jpg'
 depth_format: '.npy'
+
 require_midas: True
+
 depth_threshold: 0.04
 ext_edge_threshold: 0.002
+
 sparse_iter: 5
 filter_size: [7, 7, 5, 5, 5]
 sigma_s: 4.0
 sigma_r: 0.5
+
 redundant_number: 12
 background_thickness: 70
 context_thickness: 140
