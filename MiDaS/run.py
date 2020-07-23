@@ -9,7 +9,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 import cv2
 import imageio
-
+import tensorflow as tf
+from torchvision.transforms import Compose
+from MiDaS.transforms import Resize, NormalizeImage, PrepareForNet
 
 def run_depth(img_names, input_path, output_path, model_path, Net, utils, target_w=None):
     """Run MonoDepthNN to compute depth maps.
@@ -22,11 +24,29 @@ def run_depth(img_names, input_path, output_path, model_path, Net, utils, target
     print("initialize")
 
     # select device
-    device = torch.device("cpu")
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
     print("device: %s" % device)
 
     # load network
-    model = Net(model_path)
+    model = Net(model_path, non_negative=True)
+    
+    transform = Compose(
+        [
+            Resize(
+                384,
+                384,
+                resize_target=None,
+                keep_aspect_ratio=True,
+                ensure_multiple_of=32,
+                resize_method="upper_bound",
+                image_interpolation_method=cv2.INTER_CUBIC,
+            ),
+            NormalizeImage(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            PrepareForNet(),
+        ]
+    )
+ 
+
     model.to(device)
     model.eval()
 
@@ -45,24 +65,32 @@ def run_depth(img_names, input_path, output_path, model_path, Net, utils, target
 
         # input
         img = utils.read_image(img_name)
-        w = img.shape[1]
-        scale = 640. / max(img.shape[0], img.shape[1])
-        target_height, target_width = int(round(img.shape[0] * scale)), int(round(img.shape[1] * scale))
-        img_input = utils.resize_image(img)
-        print(img_input.shape)
-        img_input = img_input.to(device)
-        # compute
+        img_input = transform({"image": img})["image"]
+          # compute
         with torch.no_grad():
-            out = model.forward(img_input)
+           with torch.no_grad():
+            sample = torch.from_numpy(img_input).to(device).unsqueeze(0)
+            prediction = model.forward(sample)
+            prediction = (
+                torch.nn.functional.interpolate(
+                    prediction.unsqueeze(1),
+                    size=img.shape[:2],
+                    mode="bicubic",
+                    align_corners=False,
+                )
+                .squeeze()
+                .cpu()
+                .numpy()
+            )
         
-        depth = utils.resize_depth(out, target_width, target_height)
-        img = cv2.resize((img * 255).astype(np.uint8), (target_width, target_height), interpolation=cv2.INTER_AREA)
+       
+      
 
         filename = os.path.join(
             output_path, os.path.splitext(os.path.basename(img_name))[0]
         )
-        np.save(filename + '.npy', depth)
-        utils.write_depth(filename, depth, bits=2)
+        np.save(filename + '.npy', prediction)
+        utils.write_depth(filename, prediction, bits=2)
 
     print("finished")
 

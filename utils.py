@@ -885,6 +885,156 @@ def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_cer
 
     return samples
 
+def get_MiDaS_samples_png(image_folder, depth_folder, config, specific=None, aft_certain=None):
+    lines = [os.path.splitext(os.path.basename(xx))[0] for xx in glob.glob(os.path.join(image_folder, '*' + '.png'))]
+    samples = []
+    generic_pose = np.eye(4)
+    assert len(config['traj_types']) == len(config['x_shift_range']) ==\
+           len(config['y_shift_range']) == len(config['z_shift_range']) == len(config['video_postfix']), \
+           "The number of elements in 'traj_types', 'x_shift_range', 'y_shift_range', 'z_shift_range' and \
+               'video_postfix' should be equal."
+    tgt_pose = [[generic_pose * 1]]
+    tgts_poses = []
+    for traj_idx in range(len(config['traj_types'])):
+        tgt_poses = []
+        sx, sy, sz = path_planning(config['num_frames'], config['x_shift_range'][traj_idx], config['y_shift_range'][traj_idx],
+                                   config['z_shift_range'][traj_idx], path_type=config['traj_types'][traj_idx])
+        for xx, yy, zz in zip(sx, sy, sz):
+            tgt_poses.append(generic_pose * 1.)
+            tgt_poses[-1][:3, -1] = np.array([xx, yy, zz])
+        tgts_poses += [tgt_poses]    
+    tgt_pose = generic_pose * 1
+    
+    aft_flag = True
+    if aft_certain is not None and len(aft_certain) > 0:
+        aft_flag = False
+    for seq_dir in lines:
+        if specific is not None and len(specific) > 0:
+            if specific != seq_dir:
+                continue
+        if aft_certain is not None and len(aft_certain) > 0:
+            if aft_certain == seq_dir:
+                aft_flag = True
+            if aft_flag is False:
+                continue
+        samples.append({})
+        sdict = samples[-1]            
+        sdict['depth_fi'] = os.path.join(depth_folder, seq_dir + config['depth_format'])
+        sdict['ref_img_fi'] = os.path.join(image_folder, seq_dir + '.png')
+        H, W = imageio.imread(sdict['ref_img_fi']).shape[:2]
+        sdict['int_mtx'] = np.array([[max(H, W), 0, W//2], [0, max(H, W), H//2], [0, 0, 1]]).astype(np.float32)
+        if sdict['int_mtx'].max() > 1:
+            sdict['int_mtx'][0, :] = sdict['int_mtx'][0, :] / float(W)
+            sdict['int_mtx'][1, :] = sdict['int_mtx'][1, :] / float(H)
+        sdict['ref_pose'] = np.eye(4)
+        sdict['tgt_pose'] = tgt_pose
+        sdict['tgts_poses'] = tgts_poses
+        sdict['video_postfix'] = config['video_postfix']
+        sdict['tgt_name'] = [os.path.splitext(os.path.basename(sdict['depth_fi']))[0]]
+        sdict['src_pair_name'] = sdict['tgt_name'][0]
+
+    return samples
+
+def get_MiDaS_samples_jpg(image_folder, depth_folder, config, specific=None, aft_certain=None):
+    lines = [os.path.splitext(os.path.basename(xx))[0] for xx in glob.glob(os.path.join(image_folder, '*' + '.jpg'))]
+    samples = []
+    generic_pose = np.eye(4)
+    assert len(config['traj_types']) == len(config['x_shift_range']) ==\
+           len(config['y_shift_range']) == len(config['z_shift_range']) == len(config['video_postfix']), \
+           "The number of elements in 'traj_types', 'x_shift_range', 'y_shift_range', 'z_shift_range' and \
+               'video_postfix' should be equal."
+    tgt_pose = [[generic_pose * 1]]
+    tgts_poses = []
+    for traj_idx in range(len(config['traj_types'])):
+        tgt_poses = []
+        sx, sy, sz = path_planning(config['num_frames'], config['x_shift_range'][traj_idx], config['y_shift_range'][traj_idx],
+                                   config['z_shift_range'][traj_idx], path_type=config['traj_types'][traj_idx])
+        for xx, yy, zz in zip(sx, sy, sz):
+            tgt_poses.append(generic_pose * 1.)
+            tgt_poses[-1][:3, -1] = np.array([xx, yy, zz])
+        tgts_poses += [tgt_poses]    
+    tgt_pose = generic_pose * 1
+    
+    aft_flag = True
+    if aft_certain is not None and len(aft_certain) > 0:
+        aft_flag = False
+    for seq_dir in lines:
+        if specific is not None and len(specific) > 0:
+            if specific != seq_dir:
+                continue
+        if aft_certain is not None and len(aft_certain) > 0:
+            if aft_certain == seq_dir:
+                aft_flag = True
+            if aft_flag is False:
+                continue
+        samples.append({})
+        sdict = samples[-1]            
+        sdict['depth_fi'] = os.path.join(depth_folder, seq_dir + config['depth_format'])
+        sdict['ref_img_fi'] = os.path.join(image_folder, seq_dir + '.jpg')
+        H, W = imageio.imread(sdict['ref_img_fi']).shape[:2]
+        sdict['int_mtx'] = np.array([[max(H, W), 0, W//2], [0, max(H, W), H//2], [0, 0, 1]]).astype(np.float32)
+        if sdict['int_mtx'].max() > 1:
+            sdict['int_mtx'][0, :] = sdict['int_mtx'][0, :] / float(W)
+            sdict['int_mtx'][1, :] = sdict['int_mtx'][1, :] / float(H)
+        sdict['ref_pose'] = np.eye(4)
+        sdict['tgt_pose'] = tgt_pose
+        sdict['tgts_poses'] = tgts_poses
+        sdict['video_postfix'] = config['video_postfix']
+        sdict['tgt_name'] = [os.path.splitext(os.path.basename(sdict['depth_fi']))[0]]
+        sdict['src_pair_name'] = sdict['tgt_name'][0]
+
+    return samples
+
+def get_MiDaS_samples_jpeg(image_folder, depth_folder, config, specific=None, aft_certain=None):
+    lines = [os.path.splitext(os.path.basename(xx))[0] for xx in glob.glob(os.path.join(image_folder, '*' + '.jpeg'))]
+    samples = []
+    generic_pose = np.eye(4)
+    assert len(config['traj_types']) == len(config['x_shift_range']) ==\
+           len(config['y_shift_range']) == len(config['z_shift_range']) == len(config['video_postfix']), \
+           "The number of elements in 'traj_types', 'x_shift_range', 'y_shift_range', 'z_shift_range' and \
+               'video_postfix' should be equal."
+    tgt_pose = [[generic_pose * 1]]
+    tgts_poses = []
+    for traj_idx in range(len(config['traj_types'])):
+        tgt_poses = []
+        sx, sy, sz = path_planning(config['num_frames'], config['x_shift_range'][traj_idx], config['y_shift_range'][traj_idx],
+                                   config['z_shift_range'][traj_idx], path_type=config['traj_types'][traj_idx])
+        for xx, yy, zz in zip(sx, sy, sz):
+            tgt_poses.append(generic_pose * 1.)
+            tgt_poses[-1][:3, -1] = np.array([xx, yy, zz])
+        tgts_poses += [tgt_poses]    
+    tgt_pose = generic_pose * 1
+    
+    aft_flag = True
+    if aft_certain is not None and len(aft_certain) > 0:
+        aft_flag = False
+    for seq_dir in lines:
+        if specific is not None and len(specific) > 0:
+            if specific != seq_dir:
+                continue
+        if aft_certain is not None and len(aft_certain) > 0:
+            if aft_certain == seq_dir:
+                aft_flag = True
+            if aft_flag is False:
+                continue
+        samples.append({})
+        sdict = samples[-1]            
+        sdict['depth_fi'] = os.path.join(depth_folder, seq_dir + config['depth_format'])
+        sdict['ref_img_fi'] = os.path.join(image_folder, seq_dir + '.jpeg')
+        H, W = imageio.imread(sdict['ref_img_fi']).shape[:2]
+        sdict['int_mtx'] = np.array([[max(H, W), 0, W//2], [0, max(H, W), H//2], [0, 0, 1]]).astype(np.float32)
+        if sdict['int_mtx'].max() > 1:
+            sdict['int_mtx'][0, :] = sdict['int_mtx'][0, :] / float(W)
+            sdict['int_mtx'][1, :] = sdict['int_mtx'][1, :] / float(H)
+        sdict['ref_pose'] = np.eye(4)
+        sdict['tgt_pose'] = tgt_pose
+        sdict['tgts_poses'] = tgts_poses
+        sdict['video_postfix'] = config['video_postfix']
+        sdict['tgt_name'] = [os.path.splitext(os.path.basename(sdict['depth_fi']))[0]]
+        sdict['src_pair_name'] = sdict['tgt_name'][0]
+
+    return samples
+
 def get_valid_size(imap):
     x_max = np.where(imap.sum(1).squeeze() > 0)[0].max() + 1
     x_min = np.where(imap.sum(1).squeeze() > 0)[0].min()
