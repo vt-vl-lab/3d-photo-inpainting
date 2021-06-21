@@ -5,8 +5,8 @@ MiDaS_model_ckpt: MiDaS/model.pt
 use_boostmonodepth: True
 fps: 40
 num_frames: 240
-x_shift_range: [0.00, 0.00, -0.01, -0.01]
-y_shift_range: [0.00, 0.00, -0.01, -0.00]
+x_shift_range: [0.00, 0.00, -0.015, -0.015]
+y_shift_range: [0.00, 0.00, -0.015, -0.00]
 z_shift_range: [-0.05, -0.05, -0.05, -0.05]
 traj_types: ['double-straight-line', 'double-straight-line', 'circle', 'circle']
 video_postfix: ['dolly-zoom-in', 'zoom-in', 'circle', 'swing']
