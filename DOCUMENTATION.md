@@ -38,6 +38,8 @@ argument.yml
     - Pretrained model of color inpainting
 - `MiDaS_model_ckpt: MiDaS/model.pt`
     - Pretrained model of depth estimation
+- `use_boostmonodepth: True`
+    - Use [BoostMonocularDepth](https://github.com/compphoto/BoostingMonocularDepth) to get sharper monocular depth estimation
 - `fps: 40`
     - Frame per second of output rendered video
 - `num_frames: 240`
