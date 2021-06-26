@@ -24,23 +24,21 @@ In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
 
 ## Prerequisites
+- [Anaconda3](https://www.anaconda.com/products/individual)
 
-- Linux (tested on Ubuntu 18.04.4 LTS)
-- Anaconda
-- Python 3.7 (tested on 3.7.4)
-- PyTorch 1.4.0 (tested on 1.4.0 for execution)
+You can follow a video tutorial [here]() if it's more convenient for you.
 
-and the Python dependencies listed in [requirements.txt](requirements.txt)
 - To get started, please run the following commands:
     ```bash
     conda create -n 3DP python=3.7 anaconda
     conda activate 3DP
-    pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit==10.1.243 -c pytorch
+    pip install -r requirements.txt
     pip install pyyaml
     pip install cython
     pip install pyqt5
     ```
+    If you cannot install Cython successfully, please install VS C++ Toolkit. Tutorial [here](https://www.notion.so/How-To-Install-Microsoft-C-Build-Tools-f79ca6796a524674878b80e998c88b02).
 - Next, clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
 
     Unzip, drag and drop it here:
