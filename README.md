@@ -53,17 +53,17 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     ```
     📂3d-photo-inpainting/
     ├── 📂checkpoints/
-    │   ├── color-model.pth
-    │   ├── depth-model.pth
-    │   ├── edge-model.pth
-    │   └── model.pt
+    │   ├── 📜color-model.pth
+    │   ├── 📜depth-model.pth
+    │   ├── 📜edge-model.pth
+    │   └── 📜model.pt
     ├── 📂BoostingMonocularDepth/
     │   ├── 📂midas/
-    │   │   └── model-f46da743.pt (rename to model.pt after dragged in)
+    │   │   └── 📜model-f46da743.pt (rename to model.pt after dragged in)
     │   └── 📂pix2pix/
     │       └── 📂checkpoints/
     │           └── 📂mergemodel/
-    │               └── latest_net_G.pth
+    │               └── 📜latest_net_G.pth
     │...
     ```
     
