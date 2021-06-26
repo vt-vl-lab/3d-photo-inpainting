@@ -41,11 +41,32 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     pip install cython
     pip install pyqt5
     ```
-- Next, please download the model weight using the following command:
-    ```bash
-    chmod +x download.sh
-    ./download.sh
-    ```    
+- Next, please download the following models & weights and put them in the right file directory:
+    - [color-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/color-model.pth)
+    - [depth-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/depth-model.pth)
+    - [edge-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/edge-model.pth)
+    - [model.pt](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/model.pt)
+    - [model-f46da743.pt](https://github.com/intel-isl/MiDaS/releases/download/v2/model-f46da743.pt)
+    - [latest_net_G.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/latest_net_G.pth)
+
+
+    ```
+    📂3d-photo-inpainting/
+    ├── 📂checkpoints/
+    │   ├── color-model.pth
+    │   ├── depth-model.pth
+    │   ├── edge-model.pth
+    │   └── model.pt
+    ├── 📂BoostingMonocularDepth/
+    │   ├── 📂midas/
+    │   │   └── model-f46da743.pt (rename to model.pt after dragged in)
+    │   └── 📂pix2pix/
+    │       └── 📂checkpoints/
+    │           └── 📂mergemodel/
+    │               └── latest_net_G.pth
+    │...
+    ```
+    
 
 ## Quick start
 Please follow the instructions in this section. 
