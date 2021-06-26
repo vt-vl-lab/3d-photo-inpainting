@@ -37,6 +37,9 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     conda activate 3DP
     pip install -r requirements.txt
     conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit==10.1.243 -c pytorch
+    pip install pyyaml
+    pip install cython
+    pip install pyqt5
     ```
 - Next, please download the model weight using the following command:
     ```bash
