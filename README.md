@@ -41,6 +41,15 @@ and the Python dependencies listed in [requirements.txt](requirements.txt)
     pip install cython
     pip install pyqt5
     ```
+- Next, clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
+
+    Unzip, drag and drop it here:
+    ```
+    📂3d-photo-inpainting/
+    ├── 📂BoostingMonocularDepth/ <--
+    │...
+    ```
+    
 - Next, please download the following models & weights and put them in the right file directory:
     - [color-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/color-model.pth)
     - [depth-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/depth-model.pth)
