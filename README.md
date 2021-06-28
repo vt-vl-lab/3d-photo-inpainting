@@ -62,7 +62,8 @@ You can follow a video tutorial [here]() if it's more convenient for you.
     ├── 📂checkpoints/
     │   ├── 📜color-model.pth
     │   ├── 📜depth-model.pth
-    │   ├── 📜edge-model.pth
+    │   └── 📜edge-model.pth
+    ├── 📂MiDaS/
     │   └── 📜model.pt
     ├── 📂BoostingMonocularDepth/
     │   ├── 📂midas/
