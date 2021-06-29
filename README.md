@@ -82,7 +82,7 @@ This should allow to execute our results.
 For more detailed instructions, please refer to [`DOCUMENTATION.md`](DOCUMENTATION.md).
 
 ## Execute
-1. Put ```.jpg``` files (e.g., test.jpg) into the ```image``` folder. 
+1. Put ```.jpg``` files (e.g., test.jpg) into the ```image``` folder.  Don't use any space in the image name (eg. "image 1.jpg" with not work)
     - E.g., `image/moon.jpg`
 2. Run the following command
     ```bash
