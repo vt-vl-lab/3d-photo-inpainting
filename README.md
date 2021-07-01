@@ -32,7 +32,7 @@ You can follow a video tutorial [here]() if it's more convenient for you.
     ```bash
     conda create -n 3DP python=3.7 anaconda
     conda activate 3DP
-    conda install pytorch==1.4.0 torchvision==0.5.0 cudatoolkit==10.1.243 -c pytorch
+    conda install pytorch==1.5.0 torchvision==0.6.0 cudatoolkit=10.2 -c pytorch
     pip install -r requirements.txt
     pip install pyyaml
     pip install cython
