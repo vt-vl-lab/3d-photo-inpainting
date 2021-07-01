@@ -36,7 +36,7 @@ You can follow a video tutorial [here]() if it's more convenient for you.
     pip install -r requirements.txt
     pip install pyyaml
     pip install cython
-    pip install pyqt5
+    pip install pyqt5==5.12
     ```
     If you cannot install Cython successfully, please install VS C++ Toolkit. Tutorial [here](https://www.notion.so/How-To-Install-Microsoft-C-Build-Tools-f79ca6796a524674878b80e998c88b02).
 - Next, clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
