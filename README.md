@@ -30,14 +30,13 @@ You can follow a video tutorial [here]() if it's more convenient for you.
 
 - To get started, please run the following commands:
     ```bash
-    conda create -n 3DP python=3.7 anaconda
+    conda create -n 3DP python=3.7
     conda activate 3DP
     conda install pytorch==1.5.0 torchvision==0.6.0 cudatoolkit=10.2 -c pytorch
     pip install -r requirements.txt
     pip install pyyaml
     pip install cython
-    pip install pyqt5==5.12
-    pip install pyqtwebengine==5.12
+    pip install pyqt5
     ```
     If you cannot install Cython successfully, please install VS C++ Toolkit. Tutorial [here](https://www.notion.so/How-To-Install-Microsoft-C-Build-Tools-f79ca6796a524674878b80e998c88b02).
 - Next, clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
