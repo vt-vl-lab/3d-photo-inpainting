@@ -26,7 +26,7 @@ In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 ## Prerequisites
 - [Anaconda3](https://www.anaconda.com/products/individual)
 
-You can follow a video tutorial [here]() if it's more convenient for you.
+You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's more convenient for you.
 
 - To get started, please run the following commands:
     ```bash
