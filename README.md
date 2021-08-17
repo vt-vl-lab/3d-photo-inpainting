@@ -49,13 +49,13 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     │...
     ```
     
-- Next, please download the following models & weights and put them in the right file directory:
-    - [color-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/color-model.pth)
-    - [depth-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/depth-model.pth)
-    - [edge-model.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/edge-model.pth)
-    - [model.pt](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/model.pt)
-    - [model-f46da743.pt](https://github.com/intel-isl/MiDaS/releases/download/v2/model-f46da743.pt)
-    - [latest_net_G.pth](https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/latest_net_G.pth)
+- Next, please download the following models & weights and put them in the right file directory (from my backed up IceDrive):
+    - [color-model.pth](https://icedrive.net/0/b7ri1hJxKH)
+    - [depth-model.pth](https://icedrive.net/0/7csdKoXaas)
+    - [edge-model.pth](https://icedrive.net/0/43JgqNC82p)
+    - [model.pt](https://icedrive.net/0/5cH5SwtZFf)
+    - [model-f46da743.pt](https://icedrive.net/0/5apOAqTQ5k)
+    - [latest_net_G.pth](https://icedrive.net/0/d16Nek9r8B)
 
 
     ```
