@@ -49,7 +49,7 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     │...
     ```
     
-- Next, please download the following models & weights and put them in the right file directory (from my backed up IceDrive):
+- Next, please download the following models & weights and put them in the right file directory (from my backup IceDrive):
     - [color-model.pth](https://icedrive.net/0/b7ri1hJxKH)
     - [depth-model.pth](https://icedrive.net/0/7csdKoXaas)
     - [edge-model.pth](https://icedrive.net/0/43JgqNC82p)
