@@ -28,8 +28,20 @@ In IEEE Conference on Computer Vision and Pattern Recognition (CVPR), 2020.
 
 You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's more convenient for you.
 
-- To get started, please run the following commands:
-    ```bash
+- To get started, please run the following steps:
+- Clone this [page](https://github.com/bycloudai/3d-photo-inpainting-Windows) 
+- Clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
+
+    Unzip, drag and drop it here, follow the below folder structure:
+    ```
+    📂3d-photo-inpainting/
+    ├── 📂BoostingMonocularDepth/ <--
+    │...
+    ```
+    Change your Anaconda directory to that folder with `cd YOUR_FILE_DIRECTORY/3d-photo-inpainting/`
+
+- Next, follow these installation steps under Anaconda Prompt:
+```bash
     conda create -n 3DP python=3.7
     conda activate 3DP
     ```
@@ -50,14 +62,6 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     pip install pyqt5
     ```
     If you cannot install Cython successfully, please install VS C++ Toolkit. Tutorial [here](https://www.notion.so/How-To-Install-Microsoft-C-Build-Tools-f79ca6796a524674878b80e998c88b02).
-- Next, clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
-
-    Unzip, drag and drop it here:
-    ```
-    📂3d-photo-inpainting/
-    ├── 📂BoostingMonocularDepth/ <--
-    │...
-    ```
     
 - Next, please download the following models & weights and put them in the right file directory (from my backup IceDrive):
     - [color-model.pth](https://icedrive.net/0/b7ri1hJxKH)
