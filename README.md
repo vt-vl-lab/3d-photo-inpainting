@@ -41,6 +41,7 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     ```bash
     conda install pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c conda-forge
     ```    
+    Continue:
     ```bash
     pip install decorator
     pip install -r requirements.txt
