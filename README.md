@@ -32,7 +32,16 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     ```bash
     conda create -n 3DP python=3.7
     conda activate 3DP
+    ```
+    For any other GPU that's < RTX 30 series:
+    ```bash
     conda install pytorch==1.5.0 torchvision==0.6.0 cudatoolkit=10.2 -c pytorch
+    ```
+    For any RTX 30 series:
+    ```bash
+    conda install pytorch torchvision torchaudio cudatoolkit=11.1 -c pytorch -c conda-forge
+    ```    
+    ```bash
     pip install decorator
     pip install -r requirements.txt
     pip install pyyaml
