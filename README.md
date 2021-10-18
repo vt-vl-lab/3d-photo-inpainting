@@ -38,10 +38,10 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
     ├── 📂BoostingMonocularDepth/ <--
     │...
     ```
-    Change your Anaconda directory to that folder with `cd YOUR_FILE_DIRECTORY/3d-photo-inpainting/`
+Change your Anaconda directory to that folder with `cd YOUR_FILE_DIRECTORY/3d-photo-inpainting/`
 
 - Next, follow these installation steps under Anaconda Prompt:
-```bash
+    ```bash
     conda create -n 3DP python=3.7
     conda activate 3DP
     ```
