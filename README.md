@@ -32,7 +32,7 @@ You can follow a video tutorial [here](https://youtu.be/wyYK82C6W88) if it's mor
 - Clone this [page](https://github.com/bycloudai/3d-photo-inpainting-Windows) 
 - Clone this [page](https://github.com/compphoto/BoostingMonocularDepth.git)
 
-    Unzip, drag and drop it here, follow the below folder structure:
+    Unzip, drag and drop it here, follow the below folder structure(change the file names too):
     ```
     📂3d-photo-inpainting/
     ├── 📂BoostingMonocularDepth/ <--
