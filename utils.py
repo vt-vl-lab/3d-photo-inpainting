@@ -972,7 +972,7 @@ def follow_image_aspect_ratio(depth, image):
     return depth
 
 def depth_resize(depth, origin_size, image_size):
-    if origin_size[0] is not 0:
+    if origin_size[0] != 0:
         max_depth = depth.max()
         depth = depth / max_depth
         depth = resize(depth, origin_size, order=1, mode='edge')
