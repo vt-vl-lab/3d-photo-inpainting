@@ -63,13 +63,13 @@ Change your Anaconda directory to that folder with `cd YOUR_FILE_DIRECTORY/3d-ph
     ```
     If you cannot install Cython, cynetworkx successfully, please install VS C++ Toolkit. Tutorial [here](https://www.notion.so/How-To-Install-Microsoft-C-Build-Tools-f79ca6796a524674878b80e998c88b02).
     
-- Next, please download the following models & weights and put them in the right file directory (from my backup IceDrive):
-    - [color-model.pth](https://icedrive.net/0/b7ri1hJxKH)
-    - [depth-model.pth](https://icedrive.net/0/7csdKoXaas)
-    - [edge-model.pth](https://icedrive.net/0/43JgqNC82p)
-    - [model.pt](https://icedrive.net/0/5cH5SwtZFf)
-    - [model-f46da743.pt](https://icedrive.net/0/5apOAqTQ5k)
-    - [latest_net_G.pth](https://icedrive.net/0/d16Nek9r8B)
+- Next, please download the following models & weights and put them in the right file directory (from my backup [drive](https://drive.google.com/drive/folders/1oiH0qN1yuogDe_zCcaAhECngZtkVi7hz?usp=sharing)):
+    - color-model.pth
+    - depth-model.pth
+    - edge-model.pth
+    - model.pt
+    - model-f46da743.pt
+    - latest_net_G.pth
 
 
     ```
