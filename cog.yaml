@@ -1,0 +1,34 @@
+# Configuration for Cog ⚙️
+# Reference: https://github.com/replicate/cog/blob/main/docs/yaml.md
+
+build:
+  # set to true if your model requires a GPU
+  gpu: true
+  cuda: "11.4"
+
+  # python version in the form '3.8' or '3.8.12'
+  python_version: "3.8"
+
+  # a list of packages in the format <package-name===<version>
+  python_packages:
+
+    - "ipython==7.33.0"
+    - "vispy==0.6.4"
+    - "moviepy==1.0.2"
+    - "transforms3d==0.3.1"
+    - "networkx==2.3"
+    - "torch==1.11.0"
+    - "torchvision==0.12.0"
+    - "pyyaml==5.4.1"
+  
+  # commands run after the environment is setup
+  run:
+    - "apt-get update && apt-get install sed"
+    - "apt-get install -y mesa-utils-extra libegl1-mesa-dev libgles2-mesa-dev xvfb"
+    - "apt-get install -y libsm6 libxrender1"
+    - "pip install scipy matplotlib scikit-image"
+    - "pip install pyqt5 pyopengl"
+    - "pip install opencv-python-headless"
+
+# predict.py defines how predictions are run on your model
+predict: "predict.py:Predictor"

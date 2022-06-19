@@ -1,5 +1,9 @@
 # [CVPR 2020] 3D Photography using Context-aware Layered Depth Inpainting
 
+[Demo and Docker image on Replicate](https://replicate.com/vt-vl-lab/3d-photo-inpainting)
+
+<a href="https://replicate.com/vt-vl-lab/3d-photo-inpainting"><img src="https://replicate.com/vt-vl-lab/3d-photo-inpainting/badge"></a>
+
 [![Open 3DPhotoInpainting in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/1706ToQrkIZshRSJSHvZ1RuCiM__YX3Bz)
 
 ### [[Paper](https://arxiv.org/abs/2004.04727)] [[Project Website](https://shihmengli.github.io/3D-Photo-Inpainting/)] [[Google Colab](https://colab.research.google.com/drive/1706ToQrkIZshRSJSHvZ1RuCiM__YX3Bz)]
