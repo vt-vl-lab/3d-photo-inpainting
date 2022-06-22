@@ -884,7 +884,7 @@ def get_MiDaS_samples(image_folder, depth_folder, config, specific=None, aft_cer
         sdict['src_pair_name'] = sdict['tgt_name'][0]
 
     return samples
-
+    
 def get_valid_size(imap):
     x_max = np.where(imap.sum(1).squeeze() > 0)[0].max() + 1
     x_min = np.where(imap.sum(1).squeeze() > 0)[0].min()
