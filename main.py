@@ -27,7 +27,8 @@ from utils import get_MiDaS_samples, read_MiDaS_depth
 parser = argparse.ArgumentParser()
 parser.add_argument("--config", type=str, default="argument.yml", help="Configure of post processing")
 args = parser.parse_args()
-config = yaml.load(open(args.config, "r"))
+with open(args.config, "r") as file:
+    config = yaml.safe_load(file)
 if config["offscreen_rendering"] is True:
     vispy.use(app="egl")
 os.makedirs(config["mesh_folder"], exist_ok=True)
