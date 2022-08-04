@@ -1,0 +1,27 @@
+version: '2.3'
+
+services:
+  vispy:
+    build:
+      context: .
+      dockerfile: ./vispy.Dockerfile
+    #image: pytorch/pytorch:latest
+    container_name: fastapi
+    environment:
+      PYTHONPATH: /art_pipelines
+    volumes:
+      - ../:/art_pipelines
+      - ../../server:/workspace/server:ro
+      - ../../temp:/workspace/temp
+    #entrypoint: "dir ./"
+    entrypoint: "bash -c 'jupyter lab --no-browser --ip=0.0.0.0 --port=8893 --allow-root'"
+    ports:
+      - "8893:8893"
+    # enable gpu for linux (runtime: nvidia) or windows (deploy:...)
+    #runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities:
+                - gpu
