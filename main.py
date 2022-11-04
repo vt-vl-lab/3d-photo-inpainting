@@ -26,9 +26,9 @@ from bilateral_filtering import sparse_bilateral_filtering
 parser = argparse.ArgumentParser()
 parser.add_argument('--config', type=str, default='argument.yml',help='Configure of post processing')
 args = parser.parse_args()
-config = yaml.load(open(args.config, 'r'))
+config = yaml.full_load(open(args.config, 'r'))
 if config['offscreen_rendering'] is True:
-    vispy.use(app='egl')
+    vispy.use(app='PyQt5')
 os.makedirs(config['mesh_folder'], exist_ok=True)
 os.makedirs(config['video_folder'], exist_ok=True)
 os.makedirs(config['depth_folder'], exist_ok=True)
