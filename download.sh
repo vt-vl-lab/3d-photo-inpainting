@@ -4,10 +4,10 @@ fb_status=$(wget --spider -S https://filebox.ece.vt.edu/ 2>&1 | grep  "HTTP/1.1 
 mkdir checkpoints
 
 echo "downloading from filebox ..."
-curl -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/color-model.pth
-curl -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/depth-model.pth
-curl -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/edge-model.pth
-curl -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/model.pt
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/color-model.pth
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/depth-model.pth
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/edge-model.pth
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/model.pt
 
 mv color-model.pth checkpoints/.
 mv depth-model.pth checkpoints/.
@@ -19,9 +19,9 @@ git clone https://github.com/compphoto/BoostingMonocularDepth.git
 mkdir -p BoostingMonocularDepth/pix2pix/checkpoints/mergemodel/
 
 echo "downloading mergenet weights ..."
-curl -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/latest_net_G.pth
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/latest_net_G.pth
 mv latest_net_G.pth BoostingMonocularDepth/pix2pix/checkpoints/mergemodel/
-curl -O https://github.com/intel-isl/MiDaS/releases/download/v2/model-f46da743.pt
+curl --retry 5 -O https://github.com/intel-isl/MiDaS/releases/download/v2/model-f46da743.pt
 mv model-f46da743.pt BoostingMonocularDepth/midas/model.pt
 
 python patch.py
