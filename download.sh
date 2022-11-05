@@ -28,7 +28,6 @@ python patch.py
 python config.py
 mkdir -p ./KenBurns/Input
 mkdir -p ./KenBurns/Output
-python png2jpg.py
 
 pip install vispy
 pip install moviepy
