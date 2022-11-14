@@ -25,7 +25,8 @@ def run_boostmonodepth(img_names, src_folder, depth_folder):
         base_name = os.path.basename(img_name)
         tgt_name = os.path.join(BOOST_BASE, BOOST_INPUTS, base_name)
         if platform.system() == 'Windows':
-            os.system(f'copy {img_name} {tgt_name}')
+            print (f'copy "{os.path.abspath(img_name)}" "{os.path.abspath(tgt_name)}"')
+            os.system(f'copy "{os.path.abspath(img_name)}" "{os.path.abspath(tgt_name)}"')
         else:
             os.system(f'cp {img_name} {tgt_name}')
 
