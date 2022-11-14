@@ -29,11 +29,11 @@ python config.py
 mkdir -p ./KenBurns/Input
 mkdir -p ./KenBurns/Output
 
-pip install vispy
-pip install moviepy
-pip install transforms3d
-pip install networkx
-pip install opencv-python
+pip install vispy==0.6.4
+pip install moviepy==1.0.3
+pip install transforms3d==0.3.1
+pip install networkx==2.3
+pip install opencv-python==4.2.0.32
 pip install pyqt5
 pip install scipy==1.9.2
 pip install pyyaml==6.0
