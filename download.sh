@@ -19,7 +19,7 @@ git clone https://github.com/compphoto/BoostingMonocularDepth.git
 mkdir -p BoostingMonocularDepth/pix2pix/checkpoints/mergemodel/
 
 echo "downloading mergenet weights ..."
-curl --retry 5 -O https://sfu.ca/~yagiz/CVPR21/latest_net_G.pth
+curl --retry 5 -O https://filebox.ece.vt.edu/~jbhuang/project/3DPhoto/model/latest_net_G.pth
 mv latest_net_G.pth BoostingMonocularDepth/pix2pix/checkpoints/mergemodel/
 curl --retry 5 -O https://cloudstor.aarnet.edu.au/plus/s/lTIJF4vrvHCAI31/download
 mv download BoostingMonocularDepth/res101.pth
