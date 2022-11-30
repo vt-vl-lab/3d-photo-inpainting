@@ -34,7 +34,7 @@ def run_boostmonodepth(img_names, src_folder, depth_folder):
         # they save all depth as .png file
         tgt_names.append(os.path.basename(tgt_name).replace('.jpg', '.png'))
 
-    os.system(f'cd {BOOST_BASE} && python run.py --Final --data_dir {BOOST_INPUTS}/  --output_dir {BOOST_OUTPUTS} --depthNet 2')
+    os.system(f'cd {BOOST_BASE} && python run.py --Final --data_dir {BOOST_INPUTS}/  --output_dir {BOOST_OUTPUTS} --depthNet 0')
 
     for i, (img_name, tgt_name) in enumerate(zip(img_names, tgt_names)):
         img = imageio.imread(img_name)
