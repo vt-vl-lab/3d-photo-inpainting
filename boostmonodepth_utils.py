@@ -42,11 +42,11 @@ def run_boostmonodepth(img_names, src_folder, depth_folder):
         scale = 640. / max(H, W)
 
         # invert grayscale
-        from PIL import Image
-
-        image = cv2.imread(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name), 0)
-        inverted = np.invert(image)
-        inverted.save(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name))
+        if platform.system() != 'Windows':
+            from PIL import Image
+            image = cv2.imread(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name), 0)
+            inverted = np.invert(image)
+            inverted.save(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name))
         
         # resize and save depth
         target_height, target_width = int(round(H * scale)), int(round(W * scale))
