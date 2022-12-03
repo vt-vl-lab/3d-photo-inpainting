@@ -34,16 +34,23 @@ def run_boostmonodepth(img_names, src_folder, depth_folder):
         # they save all depth as .png file
         tgt_names.append(os.path.basename(tgt_name).replace('.jpg', '.png'))
 
-    os.system(f'cd {BOOST_BASE} && python run.py --Final --data_dir {BOOST_INPUTS}/  --output_dir {BOOST_OUTPUTS} --depthNet 0')
+    os.system(f'cd {BOOST_BASE} && python run.py --Final --data_dir {BOOST_INPUTS}/  --output_dir {BOOST_OUTPUTS} --depthNet 2')
 
     for i, (img_name, tgt_name) in enumerate(zip(img_names, tgt_names)):
         img = imageio.imread(img_name)
         H, W = img.shape[:2]
         scale = 640. / max(H, W)
 
+        # invert grayscale
+        image = cv2.imread(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name), 0)
+        inverted = np.invert(image)
+        from PIL import Image
+        im = Image.fromarray(inverted)
+        im.save(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name))
+        
         # resize and save depth
         target_height, target_width = int(round(H * scale)), int(round(W * scale))
-        depth = imageio.imread(os.path.join(BOOST_BASE, BOOST_OUTPUTS, tgt_name))
+        depth = inverted
         depth = np.array(depth).astype(np.float32)
         depth = resize_depth(depth, target_width, target_height)
         np.save(os.path.join(depth_folder, tgt_name.replace('.png', '.npy')), depth / 32768. - 1.)
