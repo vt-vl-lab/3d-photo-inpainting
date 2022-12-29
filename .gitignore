@@ -1,5 +1,3 @@
-#ignore all kind of files
-*.*
 #except php files
 !*.py
 !*.yml
@@ -16,3 +14,9 @@
 !video/moon.mp4
 !video/moon_circle.mp4
 !misc/moon_40.gif
+__pycache__/**
+checkpoints/**
+depth/**
+mesh/**
+MiDaS/**
+KenBurns/Input/**.jpg
