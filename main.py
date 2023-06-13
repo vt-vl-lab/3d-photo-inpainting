@@ -32,7 +32,7 @@ if config['offscreen_rendering'] is True:
     if platform.system() == 'Windows':
         vispy.use(app='PyQt5')
     else:
-        vispy.use(app='egl')
+        vispy.use(app='PyQt5')
         
 os.makedirs(config['mesh_folder'], exist_ok=True)
 os.makedirs(config['video_folder'], exist_ok=True)
